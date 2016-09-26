@@ -15,14 +15,26 @@
       <servlet-name>messageServiceImpl</servlet-name>
       <url-pattern>/helloworld/message</url-pattern>
    </servlet-mapping>
-   <servlet>
-    <servlet-name>fileUploaderServlet</servlet-name>
+<!--    <servlet> -->
+<!--     <servlet-name>fileUploaderServlet</servlet-name> -->
+<!--     <servlet-class>com.tutorialspoint.server.FileUpload</servlet-class> -->
+<!-- </servlet> -->
+<!-- <servlet-mapping> -->
+<!--   <servlet-name>fileUploaderServlet</servlet-name> -->
+<!--   <url-pattern>/helloworld/fileupload</url-pattern> -->
+<!-- </servlet-mapping> -->
+
+
+<!-- Servlets -->
+  <servlet>
+    <servlet-name>uploadServlet</servlet-name>
     <servlet-class>com.tutorialspoint.server.FileUpload</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>fileUploaderServlet</servlet-name>
-  <url-pattern>/helloworld/fileupload</url-pattern>
-</servlet-mapping>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>/helloworld/upload</url-pattern>
+  </servlet-mapping>
 
 
 <servlet>

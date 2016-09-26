@@ -25,10 +25,12 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormPanel.SubmitEvent;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -115,101 +117,155 @@ public class ConfigurationDialog extends DialogBox {
         // Enable glass background.
         setGlassEnabled(true);
         
-        VerticalPanel panel = new VerticalPanel();
-        //create a FormPanel 
-        final FormPanel form = new FormPanel();
-        //create a file upload widget
+        
+     // Create a FormPanel and point it at a service.
+                 final FormPanel form = new FormPanel();
+                 form.setAction(GWT.getModuleBaseURL() + "upload");
+         
+                 // Because we're going to add a FileUpload widget, we'll need to set the
+                 // form to use the POST method, and multipart MIME encoding.
+                 form.setEncoding(FormPanel.ENCODING_MULTIPART);
+                 form.setMethod(FormPanel.METHOD_POST);
+         
+                 // Create a panel to hold all of the form widgets.
+                 VerticalPanel panel = new VerticalPanel();
+                 form.setWidget(panel);
+                 
+                 Label lblDatenBankPath = new Label("Database path");
+                 panel.add(lblDatenBankPath);
+         
+                 // Create a TextBox, giving it a name so that it will be submitted.
+                 final TextBox tb = new TextBox();
+                 tb.setName("textBoxFormElement");
+//                 tb.addKeyUpHandler(new KeyUpHandler() {
+//    	             @Override
+//    	             public void onKeyUp(KeyUpEvent event) {
+//    	            	 tb.setName(tb.getValue());
+//    	            	 
+//
+//    	             }
+//    	         });
+                 
+                 panel.add(tb);
+         
+                 // Create a ListBox, giving it a name and some values to be associated
+                 // with its options.
+//                 ListBox lb = new ListBox();
+//                 lb.setName("listBoxFormElement");
+//                 lb.addItem("foo", "fooValue");
+//                 lb.addItem("bar", "barValue");
+//                  lb.addItem("baz", "bazValue");
+//                 panel.add(lb);
+        
+                 // Create a FileUpload widget.
+                 final FileUpload upload = new FileUpload();
+                 upload.setName("uploadFormElement");
+                 panel.add(upload);
+         
+                 // Add a 'submit' button.
+                 panel.add(new Button("Submit", new ClickHandler() {
+                     public void onClick(ClickEvent event) {
+                         form.submit();
+                     }
+                 }));
+         
+                 // Add an event handler to the form.
+                 form.addSubmitHandler(new FormPanel.SubmitHandler() {
+                   public void onSubmit(SubmitEvent event) {
+                         // This event is fired just before the form is submitted. We can
+                         // take this opportunity to perform validation.
+                         if (upload.getFilename().length() == 0) {
+                             Window.alert("The text box must not be empty");
+                             event.cancel();
+                         }
+                     }
+                 });
+         
+                 form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+                     public void onSubmitComplete(SubmitCompleteEvent event) {
+                         // When the form submission is successfully completed, this
+                         // event is fired. Assuming the service returned a response of type
+                       // text/html, we can get the result text here (see the FormPanel
+                         // documentation for further explanation).
+                        // Window.alert(event.getResults());
+                    	 messageService.getMessageUpload(upload.getFilename(), tb.getValue(), databasePath, databaseUser, databasePW, new MessageCallBack());
+                    	 
+                     }
+               });
+         
+        //        RootPanel.get().add(form);
         
         
         
-//        final FileUpload upload = new FileUpload();
-//
-//        upload.setVisible(false);
-//        upload.setName("uploadFormElement");
-//       // RootPanel.get().add(upload);
-//
-//        Button b = new Button("Select File");
-//        b.addClickHandler(new ClickHandler() {
-//            @Override
-//            public void onClick(ClickEvent event) {
-//                jsClickUpload(upload.getElement());
-//            	//messageService.getMessage(databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
-//            }
-//        });
-//
-//        upload.addChangeHandler(new ChangeHandler() {
-//
-//            @Override
-//            public void onChange(ChangeEvent event) {
-//                Window.alert(upload.getFilename());
-//            }});
-//        panel.add(upload);
-//        panel.add(b);
-       
-        final FileUpload fileUpload = new FileUpload();
-        //fileUpload.getElement().setPropertyBoolean("multiple", true);
-        //create labels
-        Label selectLabel = new Label("File selection:");
-        //create upload button
-        Button uploadButton = new Button("Upload File");
-        uploadButton.setWidth("100px");
-	      //createFolderButton.setEnabled(false);
-	      //createFolderButton.addStyleName("gwt-Green-Button");
-        form.setEncoding(FormPanel.ENCODING_MULTIPART);
-        form.setMethod(FormPanel.METHOD_POST);
-        form.setAction(GWT.getModuleBaseURL()+"fileupload");
+//        VerticalPanel panel = new VerticalPanel();
+//        //create a FormPanel 
+//        final FormPanel form = new FormPanel();
+//        //create a file upload widget
+//        final FileUpload fileUpload = new FileUpload();
+//        //fileUpload.getElement().setPropertyBoolean("multiple", true);
+//        //create labels
+//        Label selectLabel = new Label("File selection:");
+//        //create upload button
+//        Button uploadButton = new Button("Upload File");
+//        uploadButton.setWidth("100px");
+//	      //createFolderButton.setEnabled(false);
+//	      //createFolderButton.addStyleName("gwt-Green-Button");
+//        form.setEncoding(FormPanel.ENCODING_MULTIPART);
+//        form.setMethod(FormPanel.METHOD_POST);
+//       // form.setAction("/fileupload");
+//        form.setAction(GWT.getModuleBaseURL()+"fileupload");
+//        //add a label
+//        panel.add(selectLabel);
+//        //add fileUpload widget
+//        panel.add(fileUpload);
+//        //add a button to upload the file
+//        panel.add(uploadButton);
+//        
 //        uploadButton.addClickHandler(new ClickHandler() {
-//		         @Override
-//		         public void onClick(ClickEvent event) {
-//		        	 String filename = fileUpload.getFilename();
-//		        	 form.submit();
-//		   
-//		        	// messageService.getMessageUpload(filename, databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
-//		        	 
-//		 			
-//		        	 // messageCreateService.getMessage(node.getName(), composer.getName(), new MessageCreateCallBack());
-//		        	// Window.alert(filename);
-//		         }
-//		      });
-       
-        //add a label
-        panel.add(selectLabel);
-        //add fileUpload widget
-        panel.add(fileUpload);
-        //add a button to upload the file
-        panel.add(uploadButton);
-        
-        uploadButton.addClickHandler(new ClickHandler() {
-           public void onClick(ClickEvent event) {
-              //get the filename to be uploaded
-              String filename = fileUpload.getFilename();
-              if (filename.length() == 0) {
-                 Window.alert("No File Specified!");
-              } else {
-                 //submit the form
-                 form.submit();	
-            	 // messageService.getMessageForCreate(filename, databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
-              // Window.alert(filename+databaseName+databasePath);
-              }				
-           }
-        });
-     
-        form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-           @Override
-           public void onSubmitComplete(SubmitCompleteEvent event) {
-              // When the form submission is successfully completed, this 
-              //event is fired. Assuming the service returned a response 
-              //of type text/html, we can get the result text here 
-              Window.alert(event.getResults());				
-           }
-        });
-        panel.setSpacing(10);
-        
-        // Add form to the root panel.      
-        form.add(panel);      
+//           public void onClick(ClickEvent event) {
+//              //get the filename to be uploaded
+//              String filename = fileUpload.getFilename();
+//              if (filename.length() == 0) {
+//                 Window.alert("No File Specified!");
+//              } else {
+//                 //submit the form
+//                 form.submit();	
+//            	 // messageService.getMessageForCreate(filename, databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
+//              // Window.alert(filename+databaseName+databasePath);
+//              }				
+//           }
+//        });
+//        
+//        form.addSubmitHandler(new FormPanel.SubmitHandler() {
+//    		public void onSubmit(SubmitEvent event) {
+//    			if (!"".equalsIgnoreCase(fileUpload.getFilename())) {
+//    				GWT.log("UPLOADING FILE????", null);
+//                                        // NOW WHAT????
+//    			}
+//    			else{
+//    				event.cancel(); // cancel the event
+//    			}
+//
+//    		}
+//    	});
+//     
+//        form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
+//           @Override
+//           public void onSubmitComplete(SubmitCompleteEvent event) {
+//              // When the form submission is successfully completed, this 
+//              //event is fired. Assuming the service returned a response 
+//              //of type text/html, we can get the result text here 
+//              Window.alert(event.getResults());				
+//           }
+//        });
+//        panel.setSpacing(10);
+//        
+//        // Add form to the root panel.      
+//        form.add(panel);      
 
        // RootPanel.get("gwtContainer").add(form);
 
+        panel.setSpacing(10);
         setWidget(form);
     
   }

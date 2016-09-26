@@ -120,137 +120,203 @@ public class MessageServiceImpl extends RemoteServiceServlet
          
    } 
    
-   public Message getMessageUpload(String databaseNewName, String input, String databasePath, String databaseUser, String databasePW) {
+   public Message getMessageUpload(String databaseFileNewName, String databaseFolder, String databasePath, String databaseUser, String databasePW) {
        
-	   HttpServletRequest request = this.getThreadLocalRequest();
-	   
+	  
 	   Map<String, String> collectionMap = new HashMap<String, String>();
 	   
-	// Create a factory for disk-based file items
-	   FileItemFactory factory = new DiskFileItemFactory();
-	   // Create a new file upload handler
-	   ServletFileUpload upload = new ServletFileUpload(factory);
-//	   try{
-	      // Parse the request
-	         List items = null;
-			try {
-				items = upload.parseRequest(request);
-			} catch (FileUploadException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
+       FileInputStream file;
+       byte[] contents = null;
+       String[] dbNameArray = databaseFileNewName.split("\\\\");
+       int count = dbNameArray.length-1;
+       String databaseNewName = dbNameArray[count];
+	try {
+		file = new FileInputStream("/Users/Shared/"+databaseNewName);
+		
 
-	         // Process the uploaded items
-	         Iterator iter = items.iterator();
+		
+			contents = new byte[file.available()];
+		
 
-	         while (iter.hasNext()) {
-	            FileItem item = (FileItem) iter.next();
-	            //handling a normal form-field
-	            if(item.isFormField()) {
-	              // System.out.println("Got a form field");
-	               String name = item.getFieldName();
-	               String value = item.getString();
-	               collectionMap.put(value, name);
-	              // System.out.print("Name:"+name+",Value:"+value);				
-	            } else {//handling file loads
-	              // System.out.println("Not form field");
-	               String fieldName = item.getFieldName();
-	               String fileName = item.getName();
-	               collectionMap.put(fileName, fieldName);
-	               if (fileName != null) {
-	                  fileName = FilenameUtils.getName(fileName);
-	               }
-	               String contentType = item.getContentType();
-	               boolean isInMemory = item.isInMemory();
-	               long sizeInBytes = item.getSize();
-	              // System.out.print("Field Name:"+fieldName
-	              // +",File Name:"+fileName);
-	              // System.out.print("Content Type:"+contentType
-	              // +",Is In Memory:"+isInMemory+",Size:"+sizeInBytes);			 
-	               byte[] data = item.get();
-	               fileName = getServletContext().getRealPath( "/db/" + fileName);
-	              // System.out.print("File name:" +fileName);			
-//	               FileOutputStream fileOutSt = new FileOutputStream(fileName);
-//	               fileOutSt.write(data);
-//	               fileOutSt.close();
-	               //out.print("File Uploaded Successfully!");
-	               
-	               FileInputStream file = null;
-	               // databaseNewName = "/Users/elena/Desktop/Incipits.png";
-	               // String databaseNewName = fileUpload.getFilename();
-	     				try {
-	     					file = new FileInputStream(fileName);
-	     				} catch (FileNotFoundException e) {
-	     					// TODO Auto-generated catch block
-	     					e.printStackTrace();
-	     				}
-	     				
-	     				byte[] contents = null;
-	     				
-	     				try {
-	     					contents = new byte[file.available()];
-	     				} catch (IOException e) {
-	     					// TODO Auto-generated catch block
-	     					e.printStackTrace();
-	     				}
-	     			
-	     	          
-	     				try {
-	     					file.read(contents);
-	     				} catch (IOException e) {
-	     					// TODO Auto-generated catch block
-	     					e.printStackTrace();
-	     				}
-	     			
-	     	           try {
-	     				file.close();
-	     			} catch (IOException e) {
-	     				// TODO Auto-generated catch block
-	     				e.printStackTrace();
-	     			}
-	     				 Collection col = null;
-	     			      
-	     			       
-	     			     
-	     			       try {    
-	     			           		
-	     			           col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
-	     			           
-	     			           col.setProperty(OutputKeys.INDENT, "no");
-	     			          Resource res = col.createResource(fileName, BinaryResource.RESOURCE_TYPE);
-	     			          
-	     			          
-	     			         collectionMap.put(fileName, input);
-	     			          
-//	     			           if ( type.equals(XMLResource.RESOURCE_TYPE) ) {
-//	     			              res.setContent(new String(contents));
+		file.read(contents);
+//		file.close();
+		
+		
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+		
+       
+		Collection col = null;
+		
+						try {
+							col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databaseUser);
+							
+							col.setProperty(OutputKeys.INDENT, "no");
+							Resource res = col.createResource(databaseNewName, BinaryResource.RESOURCE_TYPE);
+			
+							res.setContent(contents);
+			
+						col.storeResource(res);
+						 collectionMap.put(databaseNewName, databaseFolder);
+						 
+						 
+						 String[] dbRootArray = databaseFolder.split("/");
+						 String dbRoot = dbRootArray[0];
+//			           collectionMap.put(databaseNewName, pathSegments[pathSegments.length-1]);
+						 Collection col_2 = DatabaseManager.getCollection(databasePath + dbRoot, databaseUser, databaseUser);
+	       
+						 for(int i = 0; i<col.listChildCollections().length; i++){
+				        	   String colName = col.listChildCollections()[i];
+
+				        	  collectionMap.put(colName, dbRoot);
+				        	 
+				        	   Collection currCollection = col.getChildCollection(colName);
+				        	   if(currCollection.getChildCollectionCount()>0){
+				        		   getTailCollection(currCollection, collectionMap);
+				        	   }
+				           }
+						} catch (XMLDBException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+		
+					
+        
+	   
+	   
+	   
+	   
+//	// Create a factory for disk-based file items
+//	   FileItemFactory factory = new DiskFileItemFactory();
+//	   // Create a new file upload handler
+//	   ServletFileUpload upload = new ServletFileUpload(factory);
+////	   try{
+//	      // Parse the request
+//	         List items = null;
+//			try {
+//				items = upload.parseRequest(request);
+//			} catch (FileUploadException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} 
+//
+//	         // Process the uploaded items
+//	         Iterator iter = items.iterator();
+//
+//	         while (iter.hasNext()) {
+//	            FileItem item = (FileItem) iter.next();
+//	            //handling a normal form-field
+//	            if(item.isFormField()) {
+//	              // System.out.println("Got a form field");
+//	               String name = item.getFieldName();
+//	               String value = item.getString();
+//	               collectionMap.put(value, name);
+//	              // System.out.print("Name:"+name+",Value:"+value);				
+//	            } else {//handling file loads
+//	              // System.out.println("Not form field");
+//	               String fieldName = item.getFieldName();
+//	               String fileName = item.getName();
+//	               collectionMap.put(fileName, fieldName);
+//	               if (fileName != null) {
+//	                  fileName = FilenameUtils.getName(fileName);
+//	               }
+//	               String contentType = item.getContentType();
+//	               boolean isInMemory = item.isInMemory();
+//	               long sizeInBytes = item.getSize();
+//	              // System.out.print("Field Name:"+fieldName
+//	              // +",File Name:"+fileName);
+//	              // System.out.print("Content Type:"+contentType
+//	              // +",Is In Memory:"+isInMemory+",Size:"+sizeInBytes);			 
+//	               byte[] data = item.get();
+//	               fileName = getServletContext().getRealPath( "/db/" + fileName);
+//	              // System.out.print("File name:" +fileName);			
+////	               FileOutputStream fileOutSt = new FileOutputStream(fileName);
+////	               fileOutSt.write(data);
+////	               fileOutSt.close();
+//	               //out.print("File Uploaded Successfully!");
+//	               
+//	               FileInputStream file = null;
+//	               // databaseNewName = "/Users/elena/Desktop/Incipits.png";
+//	               // String databaseNewName = fileUpload.getFilename();
+//	     				try {
+//	     					file = new FileInputStream(fileName);
+//	     				} catch (FileNotFoundException e) {
+//	     					// TODO Auto-generated catch block
+//	     					e.printStackTrace();
+//	     				}
+//	     				
+//	     				byte[] contents = null;
+//	     				
+//	     				try {
+//	     					contents = new byte[file.available()];
+//	     				} catch (IOException e) {
+//	     					// TODO Auto-generated catch block
+//	     					e.printStackTrace();
+//	     				}
+//	     			
+//	     	          
+//	     				try {
+//	     					file.read(contents);
+//	     				} catch (IOException e) {
+//	     					// TODO Auto-generated catch block
+//	     					e.printStackTrace();
+//	     				}
+//	     			
+//	     	           try {
+//	     				file.close();
+//	     			} catch (IOException e) {
+//	     				// TODO Auto-generated catch block
+//	     				e.printStackTrace();
+//	     			}
+//	     				 Collection col = null;
+//	     			      
+//	     			       
+//	     			     
+//	     			       try {    
+//	     			           		
+//	     			           col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
+//	     			           
+//	     			           col.setProperty(OutputKeys.INDENT, "no");
+//	     			          Resource res = col.createResource(fileName, BinaryResource.RESOURCE_TYPE);
+//	     			          
+//	     			          
+//	     			         collectionMap.put(fileName, input);
+//	     			          
+////	     			           if ( type.equals(XMLResource.RESOURCE_TYPE) ) {
+////	     			              res.setContent(new String(contents));
+////	     			           }
+////	     			           else {
+//	     			              res.setContent(contents);
+//	     			          // }
+//	     			           
+//	     			           col.storeResource(res);
+//	     			          for(int i = 0; i<col.listChildCollections().length; i++){
+//	     			        	   String colName = col.listChildCollections()[i];
+//
+//	     			        	  collectionMap.put(colName, input);
+//	     			        	 
+//	     			        	   Collection currCollection = col.getChildCollection(colName);
+//	     			        	   if(currCollection.getChildCollectionCount()>0){
+//	     			        		   getTailCollection(currCollection, collectionMap);
+//	     			        	   }
 //	     			           }
-//	     			           else {
-	     			              res.setContent(contents);
-	     			          // }
-	     			           
-	     			           col.storeResource(res);
-	     			          for(int i = 0; i<col.listChildCollections().length; i++){
-	     			        	   String colName = col.listChildCollections()[i];
-
-	     			        	  collectionMap.put(colName, input);
-	     			        	 
-	     			        	   Collection currCollection = col.getChildCollection(colName);
-	     			        	   if(currCollection.getChildCollectionCount()>0){
-	     			        		   getTailCollection(currCollection, collectionMap);
-	     			        	   }
-	     			           }
-	     			       } catch (XMLDBException e) {
-	     						e.printStackTrace();
-	     					} finally {
-	     			           
-	     			           if(col != null) {
-	     			               try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
-	     			           }
-	     			       }
-	               
-	            }	
-	         }
+//	     			       } catch (XMLDBException e) {
+//	     						e.printStackTrace();
+//	     					} finally {
+//	     			           
+//	     			           if(col != null) {
+//	     			               try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
+//	     			           }
+//	     			       }
+//	               
+//	            }	
+//	         }
 //	    } catch(Exception e){
 //	    	e.printStackTrace();
 //	    }
