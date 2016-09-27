@@ -53,7 +53,7 @@ public class ConfigurationDialog extends DialogBox {
 	
 	final static SingleSelectionModel<Composer> selectionModel = new SingleSelectionModel<Composer>();
 	
-	private Button ok = new Button("connenct");
+	private Button ok = new Button("Connenct");
 	
 	//boolean isCreted = false;
 	
@@ -128,12 +128,10 @@ public class ConfigurationDialog extends DialogBox {
                  form.setMethod(FormPanel.METHOD_POST);
          
                  // Create a panel to hold all of the form widgets.
-                 VerticalPanel panel = new VerticalPanel();
-                 form.setWidget(panel);
+                 
                  
                  Label lblDatenBankPath = new Label("Database path");
-                 panel.add(lblDatenBankPath);
-         
+                 
                  // Create a TextBox, giving it a name so that it will be submitted.
                  final TextBox tb = new TextBox();
                  tb.setName("textBoxFormElement");
@@ -146,7 +144,7 @@ public class ConfigurationDialog extends DialogBox {
 //    	             }
 //    	         });
                  
-                 panel.add(tb);
+                
          
                  // Create a ListBox, giving it a name and some values to be associated
                  // with its options.
@@ -160,14 +158,10 @@ public class ConfigurationDialog extends DialogBox {
                  // Create a FileUpload widget.
                  final FileUpload upload = new FileUpload();
                  upload.setName("uploadFormElement");
-                 panel.add(upload);
+                 
          
-                 // Add a 'submit' button.
-                 panel.add(new Button("Submit", new ClickHandler() {
-                     public void onClick(ClickEvent event) {
-                         form.submit();
-                     }
-                 }));
+                 
+                 
          
                  // Add an event handler to the form.
                  form.addSubmitHandler(new FormPanel.SubmitHandler() {
@@ -189,83 +183,54 @@ public class ConfigurationDialog extends DialogBox {
                          // documentation for further explanation).
                         // Window.alert(event.getResults());
                     	 messageService.getMessageUpload(upload.getFilename(), tb.getValue(), databasePath, databaseUser, databasePW, new MessageCallBack());
-                    	 
+                    	 hide();
                      }
-               });
-         
-        //        RootPanel.get().add(form);
+               });                   
+                 
+                 HorizontalPanel hPanel_1 = new HorizontalPanel();	
+   	 	      hPanel_1.add(lblDatenBankPath);
+   	 	      hPanel_1.add(tb);
+   	 	     hPanel_1.setCellWidth(lblDatenBankPath, "130");
+   	 	     
+   	 	    HorizontalPanel hPanelBoxes = new HorizontalPanel();
+   	 	  // hPanelBoxes.add(cancelButton);
+   	 	 // Add a 'submit' button.
+   	 	hPanelBoxes.add(new Button("Submit", new ClickHandler() {
+               public void onClick(ClickEvent event) {
+                   form.submit();
+               }
+           }));
+           
+           // Add a 'Cancel' button.
+   	 hPanelBoxes.add(new Button("Cancel", new ClickHandler() {
+               public void onClick(ClickEvent event) {
+                   hide();
+               }
+           }));   	 	   
+   	 	  //hPanelBoxes.add(okButton);
+   	 	 hPanelBoxes.setSpacing(10);
+   	 	// hPanelBoxes.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+   	 	
+   	 	VerticalPanel panel = new VerticalPanel();
+        form.setWidget(panel);
+        panel.add(hPanel_1);
+        panel.add(upload);
+        panel.add(hPanelBoxes);
+    
         
-        
-        
-//        VerticalPanel panel = new VerticalPanel();
-//        //create a FormPanel 
-//        final FormPanel form = new FormPanel();
-//        //create a file upload widget
-//        final FileUpload fileUpload = new FileUpload();
-//        //fileUpload.getElement().setPropertyBoolean("multiple", true);
-//        //create labels
-//        Label selectLabel = new Label("File selection:");
-//        //create upload button
-//        Button uploadButton = new Button("Upload File");
-//        uploadButton.setWidth("100px");
-//	      //createFolderButton.setEnabled(false);
-//	      //createFolderButton.addStyleName("gwt-Green-Button");
-//        form.setEncoding(FormPanel.ENCODING_MULTIPART);
-//        form.setMethod(FormPanel.METHOD_POST);
-//       // form.setAction("/fileupload");
-//        form.setAction(GWT.getModuleBaseURL()+"fileupload");
-//        //add a label
-//        panel.add(selectLabel);
-//        //add fileUpload widget
-//        panel.add(fileUpload);
-//        //add a button to upload the file
-//        panel.add(uploadButton);
-//        
-//        uploadButton.addClickHandler(new ClickHandler() {
-//           public void onClick(ClickEvent event) {
-//              //get the filename to be uploaded
-//              String filename = fileUpload.getFilename();
-//              if (filename.length() == 0) {
-//                 Window.alert("No File Specified!");
-//              } else {
-//                 //submit the form
-//                 form.submit();	
-//            	 // messageService.getMessageForCreate(filename, databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
-//              // Window.alert(filename+databaseName+databasePath);
-//              }				
-//           }
-//        });
-//        
-//        form.addSubmitHandler(new FormPanel.SubmitHandler() {
-//    		public void onSubmit(SubmitEvent event) {
-//    			if (!"".equalsIgnoreCase(fileUpload.getFilename())) {
-//    				GWT.log("UPLOADING FILE????", null);
-//                                        // NOW WHAT????
-//    			}
-//    			else{
-//    				event.cancel(); // cancel the event
-//    			}
-//
-//    		}
-//    	});
-//     
-//        form.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
-//           @Override
-//           public void onSubmitComplete(SubmitCompleteEvent event) {
-//              // When the form submission is successfully completed, this 
-//              //event is fired. Assuming the service returned a response 
-//              //of type text/html, we can get the result text here 
-//              Window.alert(event.getResults());				
-//           }
-//        });
-//        panel.setSpacing(10);
-//        
-//        // Add form to the root panel.      
-//        form.add(panel);      
+   	 	     
+   	        // VerticalPanel panel = new VerticalPanel();
+   	         //panel.setHeight("00");
+   	        // panel.setWidth("00");
+   	         panel.setSpacing(10);
+   	        // panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_DEFAULT);
+   	         //panel.add(hPanel);
+   	         //panel.add(hPanel_1);
+   	        // panel.add(hPanelBoxes);
+                 
+                 
 
-       // RootPanel.get("gwtContainer").add(form);
-
-        panel.setSpacing(10);
+        //panel.setSpacing(10);
         setWidget(form);
     
   }
@@ -273,7 +238,7 @@ public class ConfigurationDialog extends DialogBox {
 	
 	String newName = "";
 	String newPath = "";
-	Button okButton = new Button("create");
+	Button okButton = new Button("Create");
 	
 	public ConfigurationDialog(Composer parent) {
 		
@@ -285,6 +250,13 @@ public class ConfigurationDialog extends DialogBox {
 
 	         // Enable glass background.
 	         setGlassEnabled(true);
+	         
+	         Button cancelButton = new Button("Cancel");
+	         cancelButton.addClickHandler(new ClickHandler() {
+		            public void onClick(ClickEvent event) {
+		            	hide();
+		            }
+		         });
 	         
 	        // Button okButton = new Button("create");
 	         okButton.setEnabled(false);
@@ -354,15 +326,23 @@ public class ConfigurationDialog extends DialogBox {
 	 	      hPanel_1.add(txtDatenBankNewName);
 	 	     hPanel_1.setCellWidth(lblDatenBankNewName, "130");
 	 	     
+	 	    HorizontalPanel hPanelBoxes = new HorizontalPanel();
+	 	   hPanelBoxes.add(cancelButton);
+	 	  hPanelBoxes.add(okButton);
+	 	 hPanelBoxes.setSpacing(10);
+	 	 //hPanelBoxes.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+	 	
 	 	     
 	         VerticalPanel panel = new VerticalPanel();
 	         panel.setHeight("00");
 	         panel.setWidth("00");
 	         panel.setSpacing(10);
-	         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LOCALE_END);
+	         panel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 	         panel.add(hPanel);
 	         panel.add(hPanel_1);
-	         panel.add(okButton);
+	         panel.add(hPanelBoxes);
+	        
+	         //panel.add(okButton);
 
 	         setWidget(panel);
 	     
@@ -434,8 +414,8 @@ public class ConfigurationDialog extends DialogBox {
 		        	 
 		        	 ConfigurationDialog myDialog = new ConfigurationDialog(node);
 		        	 
-		        	 	          int left = Window.getClientWidth()/ 2;
-		        	 	          int top = Window.getClientHeight()/ 2;
+		        	 	          int left = Window.getClientWidth()/ 3;
+		        	 	          int top = Window.getClientHeight()/ 3;
 		        	 	          myDialog.setPopupPosition(left, top);
 		        	 	          myDialog.show();
 		        	 
@@ -456,8 +436,8 @@ public class ConfigurationDialog extends DialogBox {
 		        	 
 		        	 ConfigurationDialog myDialog = new ConfigurationDialog("uploadData");
 		        	 
-		        	 	          int left = Window.getClientWidth()/ 2;
-		        	 	          int top = Window.getClientHeight()/ 2;
+		        	 	          int left = Window.getClientWidth()/ 3;
+		        	 	          int top = Window.getClientHeight()/ 3;
 		        	 	          myDialog.setPopupPosition(left, top);
 		        	 	          myDialog.show();
 		            //Window.alert("Green Button clicked!");

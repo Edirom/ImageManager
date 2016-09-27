@@ -136,10 +136,10 @@ public class MessageServiceImpl extends RemoteServiceServlet
 
 		
 			contents = new byte[file.available()];
-		
+			collectionMap.put("/Users/Shared/", databaseNewName);
 
 		file.read(contents);
-//		file.close();
+		file.close();
 		
 		
 	} catch (FileNotFoundException e) {
@@ -155,7 +155,7 @@ public class MessageServiceImpl extends RemoteServiceServlet
 		Collection col = null;
 		
 						try {
-							col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databaseUser);
+							col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databasePW);
 							
 							col.setProperty(OutputKeys.INDENT, "no");
 							Resource res = col.createResource(databaseNewName, BinaryResource.RESOURCE_TYPE);
@@ -168,15 +168,15 @@ public class MessageServiceImpl extends RemoteServiceServlet
 						 
 						 String[] dbRootArray = databaseFolder.split("/");
 						 String dbRoot = dbRootArray[0];
-//			           collectionMap.put(databaseNewName, pathSegments[pathSegments.length-1]);
-						 Collection col_2 = DatabaseManager.getCollection(databasePath + dbRoot, databaseUser, databaseUser);
+			           collectionMap.put(dbRoot, databaseFolder);
+						 Collection col_2 = DatabaseManager.getCollection(databasePath + dbRoot, databaseUser, databasePW);
 	       
-						 for(int i = 0; i<col.listChildCollections().length; i++){
-				        	   String colName = col.listChildCollections()[i];
+						 for(int i = 0; i<col_2.listChildCollections().length; i++){
+				        	   String colName = col_2.listChildCollections()[i];
 
 				        	  collectionMap.put(colName, dbRoot);
 				        	 
-				        	   Collection currCollection = col.getChildCollection(colName);
+				        	   Collection currCollection = col_2.getChildCollection(colName);
 				        	   if(currCollection.getChildCollectionCount()>0){
 				        		   getTailCollection(currCollection, collectionMap);
 				        	   }
