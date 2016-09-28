@@ -10,6 +10,6 @@ public interface MessageService extends RemoteService {
    
    Message getMessageForCreate(String databaseNewName, String input, String databasePath, String databaseUser, String databasePW);   
    
-   Message getMessageUpload(String databaseNewName, String databaseFolder, String databasePath, String databaseUser, String databasePW);
+   Message getMessageUpload(String databaseFolder, String databasePath, String databaseUser, String databasePW);
 
 }

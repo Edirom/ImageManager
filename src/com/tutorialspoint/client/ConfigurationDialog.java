@@ -158,10 +158,7 @@ public class ConfigurationDialog extends DialogBox {
                  // Create a FileUpload widget.
                  final FileUpload upload = new FileUpload();
                  upload.setName("uploadFormElement");
-                 
-         
-                 
-                 
+                 upload.getElement().setPropertyBoolean("multiple", true);
          
                  // Add an event handler to the form.
                  form.addSubmitHandler(new FormPanel.SubmitHandler() {
@@ -182,7 +179,7 @@ public class ConfigurationDialog extends DialogBox {
                        // text/html, we can get the result text here (see the FormPanel
                          // documentation for further explanation).
                         // Window.alert(event.getResults());
-                    	 messageService.getMessageUpload(upload.getFilename(), tb.getValue(), databasePath, databaseUser, databasePW, new MessageCallBack());
+                    	 messageService.getMessageUpload(tb.getValue(), databasePath, databaseUser, databasePW, new MessageCallBack());
                     	 hide();
                      }
                });                   
@@ -197,6 +194,8 @@ public class ConfigurationDialog extends DialogBox {
    	 	 // Add a 'submit' button.
    	 	hPanelBoxes.add(new Button("Submit", new ClickHandler() {
                public void onClick(ClickEvent event) {
+            	   //String filename = ( (FileUpload) event.getSource() ).getFilename();
+            	   //Window.alert(filename);
                    form.submit();
                }
            }));
@@ -864,6 +863,12 @@ public class ConfigurationDialog extends DialogBox {
       * Leaf nodes cannot be opened.
       */
       public boolean isLeaf(Object value) {
+    	  if(value instanceof Composer){
+    		  Composer comp = (Composer) value;
+    		  if(comp.getPlaylists().size() == 0){
+    			  return true;
+    		  }
+    	  }
       // The leaf nodes are the songs, which are Strings.
       if (value instanceof String) {
          return true;

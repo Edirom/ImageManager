@@ -9,7 +9,7 @@ public interface MessageServiceAsync {
 void getMessageForCreate(String databaseNewName, String databaseName, String databasePath, String databaseUser,
 		String databasePW, AsyncCallback<Message> messageCallBack);
 
-void getMessageUpload(String databaseNewName, String databaseFolder, String databasePath, String databaseUser, String databasePW,
+void getMessageUpload(String databaseFolder, String databasePath, String databaseUser, String databasePW,
 		AsyncCallback<Message> messageCallBack);
 
 }

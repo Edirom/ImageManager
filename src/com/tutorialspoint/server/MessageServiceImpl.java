@@ -1,5 +1,6 @@
 package com.tutorialspoint.server;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -120,71 +121,158 @@ public class MessageServiceImpl extends RemoteServiceServlet
          
    } 
    
-   public Message getMessageUpload(String databaseFileNewName, String databaseFolder, String databasePath, String databaseUser, String databasePW) {
-       
-	  
-	   Map<String, String> collectionMap = new HashMap<String, String>();
+   public Message getMessageUpload(String databaseFolder, String databasePath, String databaseUser, String databasePW) {
 	   
-       FileInputStream file;
-       byte[] contents = null;
-       String[] dbNameArray = databaseFileNewName.split("\\\\");
-       int count = dbNameArray.length-1;
-       String databaseNewName = dbNameArray[count];
-	try {
-		file = new FileInputStream("/Users/Shared/"+databaseNewName);
-		
-
-		
-			contents = new byte[file.available()];
-			collectionMap.put("/Users/Shared/", databaseNewName);
-
-		file.read(contents);
-		file.close();
-		
-		
-	} catch (FileNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-
-		
+	   Map<String, String> collectionMap = new HashMap<String, String>();
        
-		Collection col = null;
-		
-						try {
-							col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databasePW);
-							
-							col.setProperty(OutputKeys.INDENT, "no");
-							Resource res = col.createResource(databaseNewName, BinaryResource.RESOURCE_TYPE);
-			
-							res.setContent(contents);
-			
-						col.storeResource(res);
-						 collectionMap.put(databaseNewName, databaseFolder);
-						 
-						 
-						 String[] dbRootArray = databaseFolder.split("/");
-						 String dbRoot = dbRootArray[0];
-			           collectionMap.put(dbRoot, databaseFolder);
-						 Collection col_2 = DatabaseManager.getCollection(databasePath + dbRoot, databaseUser, databasePW);
-	       
-						 for(int i = 0; i<col_2.listChildCollections().length; i++){
-				        	   String colName = col_2.listChildCollections()[i];
+	   File folder = new File("/Users/Shared/");
+	   File[] listOfFiles = folder.listFiles();
+	   
+	Collection col = null;
+		try {
+			col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databasePW);
+			col.setProperty(OutputKeys.INDENT, "no");
+		} catch (XMLDBException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}	
 
-				        	  collectionMap.put(colName, dbRoot);
-				        	 
-				        	   Collection currCollection = col_2.getChildCollection(colName);
-				        	   if(currCollection.getChildCollectionCount()>0){
-				        		   getTailCollection(currCollection, collectionMap);
-				        	   }
-				           }
+	   for (int i = 0; i < listOfFiles.length; i++) {
+	       if (listOfFiles[i].isFile()) {
+	    	   if(listOfFiles[i].getName().contains(".png") || listOfFiles[i].getName().contains(".jpg") || listOfFiles[i].getName().contains(".tif")
+	    			   || listOfFiles[i].getName().contains(".PNG") || listOfFiles[i].getName().contains(".JPG") || listOfFiles[i].getName().contains(".TIF")){
+	    		   try {
+		    		   
+		    		   String databaseNewName = listOfFiles[i].getName();
+		    		   FileInputStream file = new FileInputStream("/Users/Shared/"+databaseNewName);
+		    			    			
+		    		   byte[] contents = new byte[file.available()];
+		    				//collectionMap.put("/Users/Shared/", databaseNewName);
+
+		    			file.read(contents);
+		    			file.close();
+		    			
+		    			Resource res;
+						try {
+													  
+							res = col.createResource(databaseNewName, BinaryResource.RESOURCE_TYPE);
+							res.setContent(contents);
+							
+							col.storeResource(res);
+							// collectionMap.put(databaseNewName, databaseFolder);
 						} catch (XMLDBException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+		    			
+						    			
+		    		} catch (FileNotFoundException e) {
+		    			// TODO Auto-generated catch block
+		    			e.printStackTrace();
+		    		} catch (IOException e) {
+		    			// TODO Auto-generated catch block
+		    			e.printStackTrace();
+		    		}
+		    	   
+	    		   
+	    	   }
+	    	   
+	    	  
+	           //if ((listOfFiles[i].getName()).contains(".xml")) {
+	              // Window.alert("File " + listOfFiles[i].getName());
+	           //}
+	       }
+	   }
+	   
+	   String[] dbRootArray = databaseFolder.split("/");
+		 String dbRoot = dbRootArray[0];
+    // collectionMap.put(dbRoot, databaseFolder);
+		 Collection col_2;
+		try {
+			col_2 = DatabaseManager.getCollection(databasePath + dbRoot, databaseUser, databasePW);
+			for(int i = 0; i<col_2.listChildCollections().length; i++){
+		      	   String colName = col_2.listChildCollections()[i];
+
+		      	  collectionMap.put(colName, dbRoot);
+		      	  
+		      	for(int j = 0; j<col.listResources().length; j++){
+		           	   String resId = col.listResources()[j];
+		           	   //Resource res = col.getResource(resId);
+		           	   collectionMap.put(resId, dbRoot);
+		              }
+		      	 
+		      	   Collection currCollection = col_2.getChildCollection(colName);
+		      	   if(currCollection.getChildCollectionCount()>0){
+		      		   getTailCollection(currCollection, collectionMap);
+		      	   }
+		         }
+		} catch (XMLDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		 
+	   
+	   
+	   
+//	   FileInputStream file;
+//       byte[] contents = null;
+//       String[] dbNameArray = databaseFileNewName.split("\\\\");
+//       int count = dbNameArray.length-1;
+//       String databaseNewName = dbNameArray[count];
+//	try {
+//		file = new FileInputStream("/Users/Shared/"+databaseNewName);
+//			contents = new byte[file.available()];
+//			collectionMap.put("/Users/Shared/", databaseNewName);
+//
+//		file.read(contents);
+//		file.close();
+//		
+//		
+//		
+//	} catch (FileNotFoundException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	} catch (IOException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//
+//		
+//       
+//		Collection col = null;
+//		
+//						try {
+//							col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databasePW);
+//							
+//							col.setProperty(OutputKeys.INDENT, "no");
+//							Resource res = col.createResource(databaseNewName, BinaryResource.RESOURCE_TYPE);
+//			
+//							res.setContent(contents);
+//			
+//						col.storeResource(res);
+//						 collectionMap.put(databaseNewName, databaseFolder);
+//						 
+//						 
+//						 String[] dbRootArray = databaseFolder.split("/");
+//						 String dbRoot = dbRootArray[0];
+//			           collectionMap.put(dbRoot, databaseFolder);
+//						 Collection col_2 = DatabaseManager.getCollection(databasePath + dbRoot, databaseUser, databasePW);
+//	       
+//						 for(int i = 0; i<col_2.listChildCollections().length; i++){
+//				        	   String colName = col_2.listChildCollections()[i];
+//
+//				        	  collectionMap.put(colName, dbRoot);
+//				        	 
+//				        	   Collection currCollection = col_2.getChildCollection(colName);
+//				        	   if(currCollection.getChildCollectionCount()>0){
+//				        		   getTailCollection(currCollection, collectionMap);
+//				        	   }
+//				           }
+//						} catch (XMLDBException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 		
 					
         
