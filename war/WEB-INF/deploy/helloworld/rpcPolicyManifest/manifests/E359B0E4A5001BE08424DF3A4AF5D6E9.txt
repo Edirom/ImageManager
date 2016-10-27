@@ -1,0 +1,2 @@
+serviceClass: com.tutorialspoint.client.MessageService
+path: EB51DCF2DD1E4BE36F4F326B665738D9.gwt.rpc

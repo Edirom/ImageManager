@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app>
+   <!-- Default page to serve -->
+   <welcome-file-list>
+      <welcome-file>HelloWorld.html</welcome-file>
+   </welcome-file-list>
+   <servlet>
+      <servlet-name>messageServiceImpl</servlet-name>
+      <servlet-class>com.tutorialspoint.server.MessageServiceImpl
+      </servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>messageServiceImpl</servlet-name>
+      <url-pattern>/helloworld/message</url-pattern>
+   </servlet-mapping>
+<!--    <servlet> -->
+<!--     <servlet-name>fileUploaderServlet</servlet-name> -->
+<!--     <servlet-class>com.tutorialspoint.server.FileUpload</servlet-class> -->
+<!-- </servlet> -->
+<!-- <servlet-mapping> -->
+<!--   <servlet-name>fileUploaderServlet</servlet-name> -->
+<!--   <url-pattern>/helloworld/fileupload</url-pattern> -->
+<!-- </servlet-mapping> -->
+
+
+<!-- Servlets -->
+  <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>com.tutorialspoint.server.FileUpload</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>/helloworld/upload</url-pattern>
+  </servlet-mapping>
+
+
+<servlet>
+<servlet-name>remoteLogging</servlet-name>
+<servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>remoteLogging</servlet-name>
+<url-pattern>/helloworld/remote_logging</url-pattern>
+</servlet-mapping>
+
+
+
+
+<!--    <pathelement location="User/elena/Software/Eclipse/Luna/exist.jar"/> -->
+<!--    <pathelement location="User/elena/Software/Eclipse/Luna/xmldb.jar"/> -->
+<!--    <target name="libs" description="Copy libs to WEB-INF/lib"> -->
+<!--    <mkdir dir="war/WEB-INF/lib" /> -->
+<!--    <copy todir="war/WEB-INF/lib" file="/User/elena/Software/Eclipse/Luna/exist.jar" /> -->
+<!--    <copy todir="war/WEB-INF/lib" file="/User/elena/Software/Eclipse/Luna/xmldb.jar" /> -->
+<!--    </target> -->
+</web-app>
+
+
+
+<!-- <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" -->
+<!--          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  -->
+<!--               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" -->
+<!--          version="2.5" -->
+<!--          xmlns="http://java.sun.com/xml/ns/javaee"> -->
+
+   <!-- Servlets --> 
+<!--   <servlet> -->
+<!--     <servlet-name>greetServlet</servlet-name> -->
+<!--     <servlet-class>com.tutorialspoint.server.GreetingServiceImpl</servlet-class> -->
+<!--   </servlet> -->
+  
+<!--   <servlet-mapping> -->
+<!--     <servlet-name>greetServlet</servlet-name> -->
+<!--     <url-pattern>/helloworld/greet</url-pattern> -->
+<!--   </servlet-mapping> -->
+     <!-- Default page to serve -->
+<!--   <welcome-file-list> -->
+<!--     <welcome-file>HelloWorld.html</welcome-file> -->
+<!--   </welcome-file-list> -->
+
+<!-- </web-app> -->

@@ -1,0 +1,4 @@
+# Module helloworld
+# RPC service class, partial path of RPC policy file
+com.google.gwt.logging.shared.RemoteLoggingService, 9E31B1B3BE7D16726484277FAA71DEB4.gwt.rpc
+com.tutorialspoint.client.MessageService, EB51DCF2DD1E4BE36F4F326B665738D9.gwt.rpc

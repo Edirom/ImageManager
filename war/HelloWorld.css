@@ -1,0 +1,37 @@
+body {
+   text-align: center;
+   background: gray;
+}
+h3 {
+font-family: arial;
+  color: gray;
+  margin: 20px 0px 20px;
+  text-align: center;
+}
+.gwt-FileUpload {
+   color: green; 
+}
+
+/* .gwt-Green-Button{  */
+/*    color:green;    */
+/* } */
+/* .gwt-Blue-Button {  */
+/*    color:blue;    */
+/* } */
+/* .gwt-Delete-Button {  */
+      
+/* } */
+/* .gwt-CollectionTree {  */
+/*       background: white; */
+/* } */
+/* .gwt-gwt-CollectionPanel {  */
+/*       background: white; */
+/* } */
+/* .gwt-VerticalPanel {  */
+/* margin: 10px 20px 0px 10px; */
+/* } */
+
+/* .gwt-SplitLayoutPanel {  */
+/*    background: #efefef; */
+/*    border: "3px solid #e7e7e7"; */
+/* } */
