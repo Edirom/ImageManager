@@ -35,11 +35,9 @@ import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.BinaryResource;
 
 import com.google.gwt.core.client.GWT;
-import com.tutorialspoint.client.Message;
-import com.tutorialspoint.client.MessageService;
-import com.tutorialspoint.client.MessageServiceAsync; 
-
-
+import com.tutorialspoint.client.controller.Message;
+import com.tutorialspoint.client.controller.MessageService;
+import com.tutorialspoint.client.controller.MessageServiceAsync;
 import com.google.gwt.logging.client.SimpleRemoteLogHandler;
 import com.google.web.bindery.requestfactory.server.RequestFactoryServlet;
 

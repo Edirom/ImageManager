@@ -3,7 +3,7 @@
 <web-app>
    <!-- Default page to serve -->
    <welcome-file-list>
-      <welcome-file>HelloWorld.html</welcome-file>
+      <welcome-file>ImageManager.html</welcome-file>
    </welcome-file-list>
    <servlet>
       <servlet-name>messageServiceImpl</servlet-name>
@@ -13,7 +13,7 @@
 
    <servlet-mapping>
       <servlet-name>messageServiceImpl</servlet-name>
-      <url-pattern>/helloworld/message</url-pattern>
+      <url-pattern>/imagemanager/message</url-pattern>
    </servlet-mapping>
 <!--    <servlet> -->
 <!--     <servlet-name>fileUploaderServlet</servlet-name> -->
@@ -21,7 +21,7 @@
 <!-- </servlet> -->
 <!-- <servlet-mapping> -->
 <!--   <servlet-name>fileUploaderServlet</servlet-name> -->
-<!--   <url-pattern>/helloworld/fileupload</url-pattern> -->
+<!--   <url-pattern>/imagemanager/fileupload</url-pattern> -->
 <!-- </servlet-mapping> -->
 
 
@@ -33,7 +33,7 @@
   
   <servlet-mapping>
     <servlet-name>uploadServlet</servlet-name>
-    <url-pattern>/helloworld/upload</url-pattern>
+    <url-pattern>/imagemanager/upload</url-pattern>
   </servlet-mapping>
 
 
@@ -43,7 +43,7 @@
 </servlet>
 <servlet-mapping>
 <servlet-name>remoteLogging</servlet-name>
-<url-pattern>/helloworld/remote_logging</url-pattern>
+<url-pattern>/imagemaneger/remote_logging</url-pattern>
 </servlet-mapping>
 
 
@@ -74,11 +74,11 @@
   
 <!--   <servlet-mapping> -->
 <!--     <servlet-name>greetServlet</servlet-name> -->
-<!--     <url-pattern>/helloworld/greet</url-pattern> -->
+<!--     <url-pattern>/imagemanager/greet</url-pattern> -->
 <!--   </servlet-mapping> -->
      <!-- Default page to serve -->
 <!--   <welcome-file-list> -->
-<!--     <welcome-file>HelloWorld.html</welcome-file> -->
+<!--     <welcome-file>ImageManager.html</welcome-file> -->
 <!--   </welcome-file-list> -->
 
 <!-- </web-app> -->

@@ -1,6 +1,6 @@
 package com.tutorialspoint.server;
 
-import com.tutorialspoint.client.GreetingService;
+import com.tutorialspoint.client.controller.GreetingService;
 import com.tutorialspoint.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

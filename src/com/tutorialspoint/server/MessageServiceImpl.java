@@ -38,8 +38,8 @@ import com.google.gwt.user.client.ui.FileUpload;
 //import org.xmldb.api.modules.*;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.tutorialspoint.client.Message;
-import com.tutorialspoint.client.MessageService;
+import com.tutorialspoint.client.controller.Message;
+import com.tutorialspoint.client.controller.MessageService;
 
 public class MessageServiceImpl extends RemoteServiceServlet 
    implements MessageService{
