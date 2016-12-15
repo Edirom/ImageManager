@@ -1,5 +1,6 @@
 package com.tutorialspoint.client.view;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.core.client.GWT;
@@ -19,6 +20,7 @@ import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.tutorialspoint.client.ImageManager;
+import com.tutorialspoint.client.controller.ContentDB;
 import com.tutorialspoint.client.controller.Message;
 import com.tutorialspoint.client.controller.MessageService;
 import com.tutorialspoint.client.controller.MessageServiceAsync;
@@ -83,7 +85,7 @@ public class LoginDialog  extends DialogBox {
 				}
 			}
 		});
-		Label lblDatenBankName = new Label("Database Name/Folder");
+		Label lblDatenBankName = new Label("Database Name");
 		final TextBox txtDatenBankPath = new TextBox();
 		ImageManager.databasePath = "xmldb:exist://localhost:8080/exist/xmlrpc";
 		txtDatenBankPath.setValue(ImageManager.databasePath);
@@ -145,14 +147,14 @@ public class LoginDialog  extends DialogBox {
 	}
 
 
-	private class MessageCallBack implements AsyncCallback<Message> {
+	private class MessageCallBack implements AsyncCallback<ContentDB> {
 		@Override
 		public void onFailure(Throwable caught) {
 			/* server side error occured */
 			Window.alert("Unable to obtain server response: " + caught.getMessage());	
 		}
 		@Override
-		public void onSuccess(Message result) {
+		public void onSuccess(ContentDB result) {
 			/* server returned result, show user the message */
 
 			TempDialog myDialog = new TempDialog(result.getMessage());
@@ -164,7 +166,9 @@ public class LoginDialog  extends DialogBox {
 			
 			FolderPanel folderPanel = new FolderPanel();
 
-			folderPanel.createEditorView(result.getMessage(), ImageManager.databaseName);
+			folderPanel.createEditorView(result.getMessage());
+			
+			
 
 		}	   
 	}
@@ -172,7 +176,7 @@ public class LoginDialog  extends DialogBox {
 
 	public static class TempDialog extends DialogBox {
 
-		public TempDialog(Map<String, String> result) {
+		public TempDialog(Map<List<String>, String> map) {
 
 			setText("Result");
 			setAnimationEnabled(true);
@@ -184,7 +188,7 @@ public class LoginDialog  extends DialogBox {
 					TempDialog.this.hide();
 				}
 			});
-			HTML html1 = new HTML(result.toString());
+			HTML html1 = new HTML(map.toString());
 
 			VerticalPanel panel = new VerticalPanel();
 			panel.setHeight("500");

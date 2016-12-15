@@ -27,7 +27,7 @@ public class FolderTreeModel implements TreeViewModel{
 	   */
 	   //final SingleSelectionModel<Composer> selectionModel = new SingleSelectionModel<Composer>();
 
-	      public FolderTreeModel(Map<String, String> result, String databaseName, SingleSelectionModel<Folder>  selectionModel) {
+	      public FolderTreeModel(Map<List<String>, String> map, String databaseName, SingleSelectionModel<Folder>  selectionModel) {
 	    	  
 //	    	  Map<String, String> collectionMap = new HashMap<String, String>();
 //	    	  collectionMap.put("TemporaryItems", "db");
@@ -50,20 +50,26 @@ public class FolderTreeModel implements TreeViewModel{
 	        List<Folder> composers_tmp = new ArrayList<Folder>();
 	        composers_tmp.add(composer0);
 	        
-	         for(String nameKey : result.keySet()){
-	        	 Folder composer = new Folder(nameKey);
+	         for(List<String> nameKey : map.keySet()){	        	 
+	        	 Folder composer = new Folder(nameKey.get(0));
+	        	 composer.setTypeFolder(nameKey.get(1));
 	        	 composers_tmp.add(composer);
 	        	 
 	         }
 	         
 	         for(Folder comp : composers_tmp){
-	        	 String parentName = result.get(comp.getName());
-	        	 for(Folder parentComp : composers_tmp){
-					 if(parentName.equals(parentComp.getName())){
-						 parentComp.addPlaylist(comp);  
-						 comp.setParent(parentComp);
-					 }
-				 }
+	        	 for(List<String> nameKey : map.keySet()){
+	        		 if(nameKey.contains(comp.getName())){
+	        			 String parentName = map.get(nameKey);
+	        			 for(Folder parentComp : composers_tmp){
+	    					 if(parentName.equals(parentComp.getName())){
+	    						 parentComp.addPlaylist(comp);  
+	    						 comp.setParent(parentComp);
+	    					 }
+	    				 }
+	        		 }
+	        	 }
+	        	
 	         }
 	         
 	         
@@ -139,9 +145,13 @@ public class FolderTreeModel implements TreeViewModel{
 	      public boolean isLeaf(Object value) {
 	    	  if(value instanceof Folder){
 	    		  Folder comp = (Folder) value;
-	    		  if(comp.getPlaylists().size() == 0){
+	    		  if(comp.getTypeFolder().equals("File")){
 	    			  return true;
-	    		  }
+	    		  }	    		  
+	    		  return false;
+//	    		  if(comp.getPlaylists().size() == 0){
+//	    			  return true;
+//	    		  }
 	    	  }
 	      // The leaf nodes are the songs, which are Strings.
 	      if (value instanceof String) {

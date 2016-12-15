@@ -129,7 +129,7 @@ public class ConfigurationDialog extends DialogBox {
         ok.addClickHandler(new ClickHandler() {
            public void onClick(ClickEvent event) {
         	   ConfigurationDialog.this.hide();          	   
-        	   messageService.getMessage(databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
+        	   //messageService.getMessage(databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
         	   //messageService.getMessageForCreate(databaseName, databasePath, databaseUser, databasePW, new MessageCallBack());
         	   
            }
@@ -306,7 +306,7 @@ public void createEditorView(Map<String, String> result){
 	      
 	   // Create a model for the tree.
 	      //CustomTreeModel model = new CustomTreeModel(result);
-	      FolderTreeModel model = new FolderTreeModel(result, databaseName, selectionModel);
+	      //FolderTreeModel model = new FolderTreeModel(result, databaseName, selectionModel);
 	      
 	      
 	      //Get CellTree style using its BasicResources	   
@@ -316,9 +316,9 @@ public void createEditorView(Map<String, String> result){
 	      * as the default value of the root node. The default value will 
 	      * be passed to CustomTreeModel#getNodeInfo();
 	      */
-	      CellTree tree = new CellTree(model, null);
-	      tree.addStyleName("gwt-CollectionTree");
-	      tree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+	    //  CellTree tree = new CellTree(model, null);
+	    //  tree.addStyleName("gwt-CollectionTree");
+	   //   tree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 	      
 //	      tree.addOpenHandler(new OpenHandler<TreeNode>(){ 
 //				@Override
@@ -355,7 +355,7 @@ public void createEditorView(Map<String, String> result){
 	      panel_1.setWidth("330");
 	      panel_1.setHeight("700");
 	      panel_1.addStyleName("gwt-CollectionPanel");
-	      panel_1.add(tree);
+	    //  panel_1.add(tree);
 		    
 
 		 // Add the widgets to the root panel.

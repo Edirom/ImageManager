@@ -3,32 +3,20 @@ package com.tutorialspoint.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.transform.OutputKeys;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.xmldb.api.DatabaseManager;
 import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.Resource;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.BinaryResource;
 import org.xmldb.api.modules.CollectionManagementService;
-import org.xmldb.api.modules.XMLResource;
-
-import com.google.gwt.user.client.ui.FileUpload;
 
 //import javax.xml.transform.OutputKeys;
 
@@ -38,6 +26,7 @@ import com.google.gwt.user.client.ui.FileUpload;
 //import org.xmldb.api.modules.*;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.tutorialspoint.client.controller.ContentDB;
 import com.tutorialspoint.client.controller.Message;
 import com.tutorialspoint.client.controller.MessageService;
 
@@ -47,76 +36,101 @@ public class MessageServiceImpl extends RemoteServiceServlet
    private static final long serialVersionUID = 1L;
 
 
-   public Message getMessage(String input, String databasePath, String databaseUser, String databasePW) {
+   public ContentDB getMessage(String input, String databasePath, String databaseUser, String databasePW) {
 	          
        Collection col = null;
       
-       Map<String, String> collectionMap = new HashMap<String, String>();
+       Map<List<String>, String> collectionMap = new HashMap<List<String>, String>();
      
-       try {    
-           		
-           col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
-           
-           col.setProperty(OutputKeys.INDENT, "no");
-           
-//           Collection newcol = DatabaseManager.getCollection(databasePath+"db/newCollection", databaseUser, databasePW);
-//           if(newcol == null){
-//        	   CollectionManagementService mgt = (CollectionManagementService) col.getService("CollectionManagementService", "1.0");
-//    	       newcol = mgt.createCollection("newCollection");
+//       try {    
+//           		
+//           col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
+//           
+//           col.setProperty(OutputKeys.INDENT, "no");
+//           
+// //+++++++++++++++++++++++++++          
+////           Collection newcol = DatabaseManager.getCollection(databasePath+"db/newCollection", databaseUser, databasePW);
+////           if(newcol == null){
+////        	   CollectionManagementService mgt = (CollectionManagementService) col.getService("CollectionManagementService", "1.0");
+////    	       newcol = mgt.createCollection("newCollection");
+////           }
+////+++++++++++++++++++++++++++            
+//    
+//         
+//           for(int i = 0; i<col.listChildCollections().length; i++){
+//        	   String colName = col.listChildCollections()[i];
+//        	  collectionMap.put(colName, input);
+//        	  
+//        	  for(int j = 0; j<col.listResources().length; j++){
+//           	   String resId = col.listResources()[j];
+//           	   //+++++++++++++++++++++++++++   
+//           	   //Resource res = col.getResource(resId);
+//           	   //+++++++++++++++++++++++++++   
+//           	   collectionMap.put(resId, input);
+//              }
+//        	 
+//        	   Collection currCollection = col.getChildCollection(colName);
+//        	   if(currCollection.getChildCollectionCount()>0){
+//        		   getTailCollection(currCollection, collectionMap);
+//        	   }
 //           }
-           
-    
-         
-           for(int i = 0; i<col.listChildCollections().length; i++){
-        	   String colName = col.listChildCollections()[i];
-        	  collectionMap.put(colName, input);
-        	  
-        	  for(int j = 0; j<col.listResources().length; j++){
-           	   String resId = col.listResources()[j];
-           	   //Resource res = col.getResource(resId);
-           	   collectionMap.put(resId, input);
-              }
-        	 
-        	   Collection currCollection = col.getChildCollection(colName);
-        	   if(currCollection.getChildCollectionCount()>0){
-        		   getTailCollection(currCollection, collectionMap);
-        	   }
-           }
-           
-          
-           
-           
-           
-       } catch (XMLDBException e) {
-			e.printStackTrace();
-		} finally {
-           
-           if(col != null) {
-               try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
-           }
-       }
+//           
+//          
+//           
+//           
+//           
+//       } catch (XMLDBException e) {
+//			e.printStackTrace();
+//		} finally {
+//           
+//           if(col != null) {
+//               try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
+//           }
+//       }
        
+       
+       
+     //+++++++++++++++++++++++++++       
 //       collectionMap.put(databaseUser, databasePW);
-// 	  collectionMap.put("TemporaryItems", input);
-// 	  collectionMap.put("apps", input);
-// 	  collectionMap.put("contents", input);
-// 	  collectionMap.put("system", input);
+     //+++++++++++++++++++++++++++ 
+       List<String> testList = new ArrayList<String>();
+       testList.add("TemporaryItems");
+       testList.add("File");
+ 	  collectionMap.put(testList, input);
  	  
+ 	 List<String> testList_1 = new ArrayList<String>();
+ 	testList_1.add("apps");
+    testList_1.add("Folder");
+ 	  collectionMap.put(testList_1, input);
+ 	  
+ 	 List<String> testList_2 = new ArrayList<String>();
+  	testList_2.add("contents");
+     testList_2.add("Folder");
+ 	  collectionMap.put(testList_2, input);
+ 	  
+ 	 List<String> testList_3 = new ArrayList<String>();
+   	testList_3.add("system");
+      testList_3.add("Folder");
+ 	  collectionMap.put(testList_3, input);
+ 	//+++++++++++++++++++++++++++ 
  	  //collectionMap.put("config", "system");
  	  //collectionMap.put("repo", "system");
-       
+ 	//+++++++++++++++++++++++++++   
       
-	  
-     // String messageString = "Hello " + outputTest + "!";     
-      Message message = new Message();
+ 	//+++++++++++++++++++++++++++  
+     // String messageString = "Hello " + outputTest + "!";
+ 	//+++++++++++++++++++++++++++ 
+ 	 ContentDB message = new ContentDB();
+    //+++++++++++++++++++++++++++ 
      // message.setMessage(messageString);
+    //+++++++++++++++++++++++++++ 
       message.setMessage(collectionMap);
-      
+    //+++++++++++++++++++++++++++       
 //      ImageTiles tiles = new ImageTiles();
 //		tiles.run(cutImageDialog);
+    //+++++++++++++++++++++++++++ 
       
-      
-      
+           
       return message;
          
    } 

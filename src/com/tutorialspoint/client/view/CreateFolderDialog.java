@@ -149,12 +149,12 @@ public class CreateFolderDialog extends DialogBox {
 	      @Override
 	      public void onSuccess(Message result) {
 	          /* server returned result, show user the message */
-	    	  TempDialog myDialog = new TempDialog(result.getMessage());
+	    	 // TempDialog myDialog = new TempDialog(result.getMessage());
 
 	          int left = Window.getClientWidth()/ 2;
 	          int top = Window.getClientHeight()/ 2;
-	          myDialog.setPopupPosition(left, top);
-	          myDialog.show();
+	       //   myDialog.setPopupPosition(left, top);
+	       //   myDialog.show();
 	        // Window.confirm(result.getMessage());
 	        // Window.enableScrolling(true);
 //	          if(isCreted){
@@ -178,9 +178,9 @@ public class CreateFolderDialog extends DialogBox {
 //	          }
 //	          else{
 	          
-	          FolderPanel folderPanel = new FolderPanel();
+	       //   FolderPanel folderPanel = new FolderPanel();
 
-				folderPanel.createEditorView(result.getMessage(), ImageManager.databaseName);
+			//	folderPanel.createEditorView(result.getMessage());
 	   //       }
 	      }	   
 	   }
