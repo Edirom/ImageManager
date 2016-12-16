@@ -1,6 +1,5 @@
 package com.tutorialspoint.client.view;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,6 @@ import com.tutorialspoint.client.controller.MessageService;
 import com.tutorialspoint.client.controller.MessageServiceAsync;
 import com.tutorialspoint.client.model.Folder;
 import com.tutorialspoint.client.model.FolderTreeModel;
-import com.tutorialspoint.client.view.LoginDialog.TempDialog;
 
 public class FolderPanel {
 
@@ -35,9 +33,8 @@ public class FolderPanel {
 
 	public void createEditorView(Map<List<String>, String> map){
 
-
 		RootPanel.get("gwtContainer").clear();
-		
+
 		Button createFolderButton = new Button("Create Folder");
 		createFolderButton.setWidth("100px");
 		createFolderButton.addClickHandler(new ClickHandler() {
@@ -59,7 +56,6 @@ public class FolderPanel {
 
 			}
 		});
-
 
 		Button uploadDataButton = new Button("Upload Data");
 		uploadDataButton.setWidth("100px");
@@ -112,114 +108,59 @@ public class FolderPanel {
 		panel.add(tileImagesButton);
 		panel.add(deleteButton);
 
-
-
 		// Create a model for the tree.
-		//CustomTreeModel model = new CustomTreeModel(result);
 		FolderTreeModel model = new FolderTreeModel(map, ImageManager.databaseName, selectionModel);
-
-		
-		//Get CellTree style using its BasicResources	   
-		//CellTree.Resources res = GWT.create(CellTree.BasicResources.class);
-		/*
-		 * Create the tree using the model. We use <code>null</code> 
-		 * as the default value of the root node. The default value will 
-		 * be passed to CustomTreeModel#getNodeInfo();
-		 */
 		CellTree tree = new CellTree(model, null);
 		tree.addStyleName("gwt-CollectionTree");
 		tree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
 
-			      tree.addOpenHandler(new OpenHandler<TreeNode>(){ 
-						@Override
-						public void onOpen(OpenEvent<TreeNode> event) {
-							//Composer comp = selectionModel.getSelectedObject();
-							//event.getTarget().getValue()
-			    	        //Window.alert(selectionModel.getSelectedObject().getName());
-			    	        //String name = selectionModel.getSelectedObject().getName();
-							Folder selectedFolder = null;
-							if(selectionModel.getSelectedObject() == null){
-								selectedFolder = (Folder) event.getTarget().getValue();
-								selectionModel.setSelected(selectedFolder, true);
-								
-							}
-							else{
-								Folder currSelectedFolder = selectionModel.getSelectedObject();
-								Folder eventFolder = (Folder) event.getTarget().getValue();
-								if(!currSelectedFolder.equals(eventFolder)){
-									selectedFolder = eventFolder;
-									selectionModel.setSelected(selectedFolder, true);
-								}
-								else{
-									selectedFolder = selectionModel.getSelectedObject();
-								}
-								
-							}
-							//if(selectionModel.getSelectedObject() != null){
-									
-								 String vollPath = selectedFolder.getPath();
-								// Window.alert(event.getTarget().getValue().toString());
-//					    	        if(selectionModel.getSelectedObject().getParent().getName().equals(databaseName)){
-//					    	        	vollPath = databaseName+"/"+name;
-//					    	        }
-//					    	        else{
-//					    	        	getParentSelection(selectionModel.getSelectedObject(), vollPath);
-//						    	        
-//					    	        }	
-								 //vollPath = databaseName+"/"+name;
-					    	        //messageService.getMessage(vollPath, databasePath, new MessageCallBack());
-					    	        messageService.getMessage(vollPath, ImageManager.databasePath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
+		tree.addOpenHandler(new OpenHandler<TreeNode>(){ 
+			@Override
+			public void onOpen(OpenEvent<TreeNode> event) {
+				Folder selectedFolder = null;
+				if(selectionModel.getSelectedObject() == null){
+					selectedFolder = (Folder) event.getTarget().getValue();
+					selectionModel.setSelected(selectedFolder, true);
 
-						//	}
-			    	       
-			    	        
-			         	   
-						}
-			    	});
+				}
+				else{
+					Folder currSelectedFolder = selectionModel.getSelectedObject();
+					Folder eventFolder = (Folder) event.getTarget().getValue();
+					if(!currSelectedFolder.equals(eventFolder)){
+						selectedFolder = eventFolder;
+						selectionModel.setSelected(selectedFolder, true);
+					}
+					else{
+						selectedFolder = selectionModel.getSelectedObject();
+					}
 
+				}								
+				String vollPath = selectedFolder.getPath();
+				messageService.getMessage(vollPath, ImageManager.databasePath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
+			}
+		});
 
-		// Open the first playlist by default.
-			      TreeNode rootNode = tree.getRootTreeNode();
-			     
-			      //TreeNode firstPlaylist = 
-			    		  rootNode.setChildOpen(0, true, false);
-		//	      firstPlaylist.setChildOpen(0, true);
-			     
+		TreeNode rootNode = tree.getRootTreeNode(); 
+		rootNode.setChildOpen(0, true, false);
 
-		VerticalPanel panel_1 = new VerticalPanel();
-		//panel_1.setBorderWidth(1);	    
+		VerticalPanel panel_1 = new VerticalPanel();	    
 		panel_1.setWidth("330");
 		panel_1.setHeight("700");
 		panel_1.addStyleName("gwt-CollectionPanel");
 		panel_1.add(tree);
 
-
-		// Add the widgets to the root panel.
-		//RootPanel.get().add(panel);
-
 		SplitLayoutPanel p = new SplitLayoutPanel();
-		p.getElement().getStyle()
-		.setProperty("border", "3px solid #e7e7e7");
-		//p.setTitle("Collection Browser");
-		//p.setBorderWidth(1);
+		p.getElement().getStyle().setProperty("border", "3px solid #e7e7e7");
 		p.setWidth("500");
 		p.setHeight("700");
-		// p.addWest(new HTML("navigation"), 330);
 		p.addWest(panel_1, 330);
-		// p.addNorth(new HTML("list"), 100);
-		// p.add(new HTML("details"));
 
 		p.add(panel);
-		//p.addStyleName("gwt-SplitLayoutPanel");
-
-
 
 		RootPanel.get("gwtContainer").add(p);
-
-
 	}
-	
-	
+
+
 	private class MessageCallBack implements AsyncCallback<ContentDB> {
 		@Override
 		public void onFailure(Throwable caught) {
@@ -230,51 +171,28 @@ public class FolderPanel {
 		public void onSuccess(ContentDB result) {
 			/* server returned result, show user the message */
 
-			TempDialog myDialog = new TempDialog(result.getMessage());
+			//			TempDialog myDialog = new TempDialog(result.getMessage());
+			//
+			//			int left = Window.getClientWidth()/ 2;
+			//			int top = Window.getClientHeight()/ 2;
+			//			myDialog.setPopupPosition(left, top);
+			//			myDialog.show();
 
-			int left = Window.getClientWidth()/ 2;
-			int top = Window.getClientHeight()/ 2;
-			myDialog.setPopupPosition(left, top);
-			myDialog.show();
-			
-			//FolderPanel folderPanel = new FolderPanel();
 			Folder selectedFolder =   selectionModel.getSelectedObject();
-//       	 //Composer composer = new Composer("NewNode");
-//       	// node.addPlaylist(composer);
-//       	// node.refresh();
-			
+
 			Map<List<String>, String> resultMap = result.getMessage();
-			//List<Folder> composers_tmp = new ArrayList<Folder>();
-			
+
 			String listOutput = "";
 			for(List<String> nameKey : resultMap.keySet()){
-				 listOutput =listOutput + " ,"+ nameKey.get(0);
-	        	 Folder composer = new Folder(nameKey.get(0));
-	        	 composer.setTypeFolder(nameKey.get(1));
-	        	 //composers_tmp.add(composer);
-	        	 selectedFolder.addPlaylist(composer);
-	        	 composer.setParent(selectedFolder);
-	        	 
-	         }
-			
-//			for(Folder comp : composers_tmp){				
-//	        	 for(List<String> nameKey : resultMap.keySet()){	        	
-//	        		 if(nameKey.contains(comp.getName())){
-//	        			 String parentName = resultMap.get(nameKey);
-//	        			 for(Folder parentComp : composers_tmp){
-//	    					 if(parentName.equals(parentComp.getName())){
-//	    						 parentComp.addPlaylist(comp);  
-//	    						 comp.setParent(parentComp);
-//	    					 }
-//	    				 }
-//	        		 }
-//	        	 }
-//	        	
-//	         }
-			//Window.alert(selectionModel.getSelectedObject().getParent().getName());
+				listOutput =listOutput + " ,"+ nameKey.get(0);
+				Folder composer = new Folder(nameKey.get(0));
+				composer.setTypeFolder(nameKey.get(1));
+				selectedFolder.addFolderlist(composer);
+				composer.setParent(selectedFolder);
+
+			}
+
 			selectedFolder.refresh();
-	        // RootPanel.get("gwtContainer").doLayout(); ;
-			//createEditorView(result.getMessage());
 
 		}	   
 	}

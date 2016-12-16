@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.tutorialspoint.client.ImageManager;
 import com.tutorialspoint.client.controller.ContentDB;
-import com.tutorialspoint.client.controller.Message;
 import com.tutorialspoint.client.controller.MessageService;
 import com.tutorialspoint.client.controller.MessageServiceAsync;
 
@@ -167,9 +166,6 @@ public class LoginDialog  extends DialogBox {
 			FolderPanel folderPanel = new FolderPanel();
 
 			folderPanel.createEditorView(result.getMessage());
-			
-			
-
 		}	   
 	}
 
