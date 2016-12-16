@@ -137,9 +137,28 @@ public class FolderPanel {
 							//event.getTarget().getValue()
 			    	        //Window.alert(selectionModel.getSelectedObject().getName());
 			    	        //String name = selectionModel.getSelectedObject().getName();
-							Window.alert("Unable to obtain server response: ");	
-							if(selectionModel.getSelectedObject() != null){
-								 String vollPath = selectionModel.getSelectedObject().getPath();
+							Folder selectedFolder = null;
+							if(selectionModel.getSelectedObject() == null){
+								selectedFolder = (Folder) event.getTarget().getValue();
+								selectionModel.setSelected(selectedFolder, true);
+								
+							}
+							else{
+								Folder currSelectedFolder = selectionModel.getSelectedObject();
+								Folder eventFolder = (Folder) event.getTarget().getValue();
+								if(!currSelectedFolder.equals(eventFolder)){
+									selectedFolder = eventFolder;
+									selectionModel.setSelected(selectedFolder, true);
+								}
+								else{
+									selectedFolder = selectionModel.getSelectedObject();
+								}
+								
+							}
+							//if(selectionModel.getSelectedObject() != null){
+									
+								 String vollPath = selectedFolder.getPath();
+								 Window.alert(event.getTarget().getValue().toString());
 //					    	        if(selectionModel.getSelectedObject().getParent().getName().equals(databaseName)){
 //					    	        	vollPath = databaseName+"/"+name;
 //					    	        }
@@ -147,11 +166,11 @@ public class FolderPanel {
 //					    	        	getParentSelection(selectionModel.getSelectedObject(), vollPath);
 //						    	        
 //					    	        }	
-					    	       
+								 //vollPath = databaseName+"/"+name;
 					    	        //messageService.getMessage(vollPath, databasePath, new MessageCallBack());
-					    	        messageService.getMessage(ImageManager.databaseName, vollPath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
+					    	        messageService.getMessage(vollPath, ImageManager.databasePath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
 
-							}
+						//	}
 			    	       
 			    	        
 			         	   
@@ -219,34 +238,42 @@ public class FolderPanel {
 			myDialog.show();
 			
 			//FolderPanel folderPanel = new FolderPanel();
+			Folder selectedFolder =   selectionModel.getSelectedObject();
+//       	 //Composer composer = new Composer("NewNode");
+//       	// node.addPlaylist(composer);
+//       	// node.refresh();
 			
 			Map<List<String>, String> resultMap = result.getMessage();
-			List<Folder> composers_tmp = new ArrayList<Folder>();
+			//List<Folder> composers_tmp = new ArrayList<Folder>();
 			
-			for(List<String> nameKey : resultMap.keySet()){	        	 
+			String listOutput = "";
+			for(List<String> nameKey : resultMap.keySet()){
+				 listOutput =listOutput + " ,"+ nameKey.get(0);
 	        	 Folder composer = new Folder(nameKey.get(0));
 	        	 composer.setTypeFolder(nameKey.get(1));
-	        	 composers_tmp.add(composer);
+	        	 //composers_tmp.add(composer);
+	        	 selectedFolder.addPlaylist(composer);
+	        	 composer.setParent(selectedFolder);
 	        	 
 	         }
 			
-			for(Folder comp : composers_tmp){
-	        	 for(List<String> nameKey : resultMap.keySet()){
-	        		 if(nameKey.contains(comp.getName())){
-	        			 String parentName = resultMap.get(nameKey);
-	        			 for(Folder parentComp : composers_tmp){
-	    					 if(parentName.equals(parentComp.getName())){
-	    						 parentComp.addPlaylist(comp);  
-	    						 comp.setParent(parentComp);
-	    					 }
-	    				 }
-	        		 }
-	        	 }
-	        	
-	         }
-	         
-	         selectionModel.getSelectedObject().refresh();
-	        
+//			for(Folder comp : composers_tmp){				
+//	        	 for(List<String> nameKey : resultMap.keySet()){	        	
+//	        		 if(nameKey.contains(comp.getName())){
+//	        			 String parentName = resultMap.get(nameKey);
+//	        			 for(Folder parentComp : composers_tmp){
+//	    					 if(parentName.equals(parentComp.getName())){
+//	    						 parentComp.addPlaylist(comp);  
+//	    						 comp.setParent(parentComp);
+//	    					 }
+//	    				 }
+//	        		 }
+//	        	 }
+//	        	
+//	         }
+			//Window.alert(selectionModel.getSelectedObject().getParent().getName());
+			selectedFolder.refresh();
+	        // RootPanel.get("gwtContainer").doLayout(); ;
 			//createEditorView(result.getMessage());
 
 		}	   

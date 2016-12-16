@@ -93,28 +93,48 @@ public class MessageServiceImpl extends RemoteServiceServlet
      //+++++++++++++++++++++++++++       
 //       collectionMap.put(databaseUser, databasePW);
      //+++++++++++++++++++++++++++ 
+       
+       String inputName[] = input.split("/");
+       String parentName = inputName[inputName.length-1];
+	   
+       if(parentName.equals("system")){
+   		 List<String> testList_22 = new ArrayList<String>();
+   	  	testList_22.add("system_1");
+   	     testList_22.add("Folder");
+   	 	  collectionMap.put(testList_22, parentName);
+   	 	  
+   	 	 List<String> testList_222 = new ArrayList<String>();
+    	  	testList_222.add("system_12");
+    	     testList_222.add("Folder");
+    	 	  collectionMap.put(testList_222, parentName);
+   		  
+   	  }
+       else{
        List<String> testList = new ArrayList<String>();
        testList.add("TemporaryItems");
        testList.add("File");
- 	  collectionMap.put(testList, input);
+ 	  collectionMap.put(testList, parentName);
  	  
  	 List<String> testList_1 = new ArrayList<String>();
  	testList_1.add("apps");
     testList_1.add("Folder");
- 	  collectionMap.put(testList_1, input);
+ 	  collectionMap.put(testList_1, parentName);
  	  
  	 List<String> testList_2 = new ArrayList<String>();
   	testList_2.add("contents");
      testList_2.add("Folder");
- 	  collectionMap.put(testList_2, input);
+ 	  collectionMap.put(testList_2, parentName);
  	  
  	 List<String> testList_3 = new ArrayList<String>();
    	testList_3.add("system");
       testList_3.add("Folder");
- 	  collectionMap.put(testList_3, input);
+ 	  collectionMap.put(testList_3, parentName);
  	//+++++++++++++++++++++++++++ 
  	  //collectionMap.put("config", "system");
  	  //collectionMap.put("repo", "system");
+       } 
+ 	  
+ 	 
  	//+++++++++++++++++++++++++++   
       
  	//+++++++++++++++++++++++++++  

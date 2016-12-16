@@ -47,31 +47,32 @@ public class FolderTreeModel implements TreeViewModel{
 	        composers.add(composer0);
 	        //composer0.setParent(composer0);
 	       
-	        List<Folder> composers_tmp = new ArrayList<Folder>();
-	        composers_tmp.add(composer0);
+	       // List<Folder> composers_tmp = new ArrayList<Folder>();
+	       // composers_tmp.add(composer0);
 	        
 	         for(List<String> nameKey : map.keySet()){	        	 
 	        	 Folder composer = new Folder(nameKey.get(0));
 	        	 composer.setTypeFolder(nameKey.get(1));
-	        	 composers_tmp.add(composer);
-	        	 
+	        	 //composers_tmp.add(composer);
+	        	 composer0.addPlaylist(composer);
+	        	 composer.setParent(composer0);
 	         }
 	         
-	         for(Folder comp : composers_tmp){
-	        	 for(List<String> nameKey : map.keySet()){
-	        		 if(nameKey.contains(comp.getName())){
-	        			 String parentName = map.get(nameKey);
-	        			 for(Folder parentComp : composers_tmp){
-	    					 if(parentName.equals(parentComp.getName())){
-	    						 parentComp.addPlaylist(comp);  
-	    						 comp.setParent(parentComp);
-	    					 }
-	    				 }
-	        		 }
-	        	 }
-	        	
-	         }
-	         
+//	         for(Folder comp : composers_tmp){
+//	        	 for(List<String> nameKey : map.keySet()){
+//	        		 if(nameKey.contains(comp.getName())){
+//	        			 String parentName = map.get(nameKey);
+//	        			 for(Folder parentComp : composers_tmp){
+//	    					 if(parentName.equals(parentComp.getName())){
+//	    						 parentComp.addPlaylist(comp);  
+//	    						 comp.setParent(parentComp);
+//	    					 }
+//	    				 }
+//	        		 }
+//	        	 }
+//	        	
+//	         }
+//	         
 	         
 	        
 	         

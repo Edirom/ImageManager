@@ -3,6 +3,9 @@ package com.tutorialspoint.client.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.Window;
+import com.tutorialspoint.client.ImageManager;
+
 public class Folder {
 	private final String name;
     private final List<Folder> composerList = new ArrayList<Folder>();
@@ -62,15 +65,17 @@ public class Folder {
 		}
 		
 		public String getPath() {
-			String path = this.parentComp.getName() +"/"+ this.name;
-			path = computePath(parentComp, path) + path;
+			String path = this.name;
+			if(parentComp != null){
+				path = computePath(parentComp, path);
+			}
 			return path;
 		}
 		
 		private String computePath(Folder currFolder, String path){
-			while(currFolder.getParent() != null){
-				path = currFolder.getParent().getName() +"/"+ path;
-				computePath(currFolder.getParent(), path);
+			path = currFolder.getName() +"/"+ path;
+			if(currFolder.getParent() != null){
+				 path = computePath(currFolder.getParent(), path);
 			}
 			return path;
 		}
