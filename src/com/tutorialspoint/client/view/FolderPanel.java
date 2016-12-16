@@ -158,7 +158,7 @@ public class FolderPanel {
 							//if(selectionModel.getSelectedObject() != null){
 									
 								 String vollPath = selectedFolder.getPath();
-								 Window.alert(event.getTarget().getValue().toString());
+								// Window.alert(event.getTarget().getValue().toString());
 //					    	        if(selectionModel.getSelectedObject().getParent().getName().equals(databaseName)){
 //					    	        	vollPath = databaseName+"/"+name;
 //					    	        }

@@ -42,12 +42,12 @@ public class MessageServiceImpl extends RemoteServiceServlet
       
        Map<List<String>, String> collectionMap = new HashMap<List<String>, String>();
      
-//       try {    
-//           		
-//           col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
-//           
-//           col.setProperty(OutputKeys.INDENT, "no");
-//           
+       try {    
+           		
+           col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
+           
+           col.setProperty(OutputKeys.INDENT, "no");
+           
 // //+++++++++++++++++++++++++++          
 ////           Collection newcol = DatabaseManager.getCollection(databasePath+"db/newCollection", databaseUser, databasePW);
 ////           if(newcol == null){
@@ -55,38 +55,50 @@ public class MessageServiceImpl extends RemoteServiceServlet
 ////    	       newcol = mgt.createCollection("newCollection");
 ////           }
 ////+++++++++++++++++++++++++++            
-//    
-//         
-//           for(int i = 0; i<col.listChildCollections().length; i++){
-//        	   String colName = col.listChildCollections()[i];
-//        	  collectionMap.put(colName, input);
-//        	  
-//        	  for(int j = 0; j<col.listResources().length; j++){
-//           	   String resId = col.listResources()[j];
-//           	   //+++++++++++++++++++++++++++   
-//           	   //Resource res = col.getResource(resId);
-//           	   //+++++++++++++++++++++++++++   
-//           	   collectionMap.put(resId, input);
-//              }
-//        	 
+    
+         
+           for(int i = 0; i<col.listChildCollections().length; i++){
+        	   String colName = col.listChildCollections()[i];
+        	   
+        	   List<String> collFolderData = new ArrayList<String>();
+        	   collFolderData.add(colName);
+        	   collFolderData.add("Folder");
+         	  collectionMap.put(collFolderData, col.getName());
+        	   
+        	  //collectionMap.put(colName, input);
+        	  
+        	  for(int j = 0; j<col.listResources().length; j++){
+           	   String resId = col.listResources()[j];
+           	   //+++++++++++++++++++++++++++   
+           	   //Resource res = col.getResource(resId);
+           	   //+++++++++++++++++++++++++++ 
+           	   
+           	   List<String> collFileData = new ArrayList<String>();
+           	   collFileData.add(resId);
+           	   collFileData.add("File");
+           	   collectionMap.put(collFileData, col.getName());
+           	   
+           	   //collectionMap.put(resId, input);
+              }
+        	 
 //        	   Collection currCollection = col.getChildCollection(colName);
 //        	   if(currCollection.getChildCollectionCount()>0){
 //        		   getTailCollection(currCollection, collectionMap);
 //        	   }
-//           }
-//           
-//          
-//           
-//           
-//           
-//       } catch (XMLDBException e) {
-//			e.printStackTrace();
-//		} finally {
-//           
-//           if(col != null) {
-//               try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
-//           }
-//       }
+           }
+           
+          
+           
+           
+           
+       } catch (XMLDBException e) {
+			e.printStackTrace();
+		} finally {
+           
+           if(col != null) {
+               try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
+           }
+       }
        
        
        
@@ -94,45 +106,45 @@ public class MessageServiceImpl extends RemoteServiceServlet
 //       collectionMap.put(databaseUser, databasePW);
      //+++++++++++++++++++++++++++ 
        
-       String inputName[] = input.split("/");
-       String parentName = inputName[inputName.length-1];
-	   
-       if(parentName.equals("system")){
-   		 List<String> testList_22 = new ArrayList<String>();
-   	  	testList_22.add("system_1");
-   	     testList_22.add("Folder");
-   	 	  collectionMap.put(testList_22, parentName);
-   	 	  
-   	 	 List<String> testList_222 = new ArrayList<String>();
-    	  	testList_222.add("system_12");
-    	     testList_222.add("Folder");
-    	 	  collectionMap.put(testList_222, parentName);
-   		  
-   	  }
-       else{
-       List<String> testList = new ArrayList<String>();
-       testList.add("TemporaryItems");
-       testList.add("File");
- 	  collectionMap.put(testList, parentName);
- 	  
- 	 List<String> testList_1 = new ArrayList<String>();
- 	testList_1.add("apps");
-    testList_1.add("Folder");
- 	  collectionMap.put(testList_1, parentName);
- 	  
- 	 List<String> testList_2 = new ArrayList<String>();
-  	testList_2.add("contents");
-     testList_2.add("Folder");
- 	  collectionMap.put(testList_2, parentName);
- 	  
- 	 List<String> testList_3 = new ArrayList<String>();
-   	testList_3.add("system");
-      testList_3.add("Folder");
- 	  collectionMap.put(testList_3, parentName);
- 	//+++++++++++++++++++++++++++ 
- 	  //collectionMap.put("config", "system");
- 	  //collectionMap.put("repo", "system");
-       } 
+//       String inputName[] = input.split("/");
+//       String parentName = inputName[inputName.length-1];
+//	   
+//       if(parentName.equals("system")){
+//   		 List<String> testList_22 = new ArrayList<String>();
+//   	  	testList_22.add("system_1");
+//   	     testList_22.add("Folder");
+//   	 	  collectionMap.put(testList_22, parentName);
+//   	 	  
+//   	 	 List<String> testList_222 = new ArrayList<String>();
+//    	  	testList_222.add("system_12");
+//    	     testList_222.add("Folder");
+//    	 	  collectionMap.put(testList_222, parentName);
+//   		  
+//   	  }
+//       else{
+//       List<String> testList = new ArrayList<String>();
+//       testList.add("TemporaryItems");
+//       testList.add("File");
+// 	  collectionMap.put(testList, parentName);
+// 	  
+// 	 List<String> testList_1 = new ArrayList<String>();
+// 	testList_1.add("apps");
+//    testList_1.add("Folder");
+// 	  collectionMap.put(testList_1, parentName);
+// 	  
+// 	 List<String> testList_2 = new ArrayList<String>();
+//  	testList_2.add("contents");
+//     testList_2.add("Folder");
+// 	  collectionMap.put(testList_2, parentName);
+// 	  
+// 	 List<String> testList_3 = new ArrayList<String>();
+//   	testList_3.add("system");
+//      testList_3.add("Folder");
+// 	  collectionMap.put(testList_3, parentName);
+// 	//+++++++++++++++++++++++++++ 
+// 	  //collectionMap.put("config", "system");
+// 	  //collectionMap.put("repo", "system");
+//       } 
  	  
  	 
  	//+++++++++++++++++++++++++++   
