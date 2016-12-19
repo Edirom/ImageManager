@@ -12,6 +12,10 @@ font-family: arial;
    color: green; 
 }
 
+.scrollPanelText {
+   text-align: left; 
+}
+
 /* .gwt-Green-Button{  */
 /*    color:green;    */
 /* } */

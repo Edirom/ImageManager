@@ -6,6 +6,8 @@ import java.util.Map;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.cellview.client.CellTree;
@@ -14,9 +16,12 @@ import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.tutorialspoint.client.ImageManager;
 import com.tutorialspoint.client.controller.ContentDB;
@@ -30,12 +35,13 @@ public class FolderPanel {
 	final static SingleSelectionModel<Folder> selectionModel = new SingleSelectionModel<Folder>();
 
 	private MessageServiceAsync messageService = GWT.create(MessageService.class);
+	Button createFolderButton;
 
 	public void createEditorView(Map<List<String>, String> map){
 
 		RootPanel.get("gwtContainer").clear();
 
-		Button createFolderButton = new Button("Create Folder");
+		createFolderButton = new Button("Create Folder");
 		createFolderButton.setWidth("100px");
 		createFolderButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -113,7 +119,19 @@ public class FolderPanel {
 		CellTree tree = new CellTree(model, null);
 		tree.addStyleName("gwt-CollectionTree");
 		tree.setKeyboardSelectionPolicy(KeyboardSelectionPolicy.ENABLED);
+		
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
 
+	        public void onSelectionChange(SelectionChangeEvent event) {
+               if(selectionModel.getSelectedObject() != null && selectionModel.getSelectedObject().getTypeFolder().equals("Folder")){            	   
+            	   createFolderButton.setEnabled(true);
+               }
+               else{
+            	   createFolderButton.setEnabled(false);
+               }
+	        }
+	    });
+		
 		tree.addOpenHandler(new OpenHandler<TreeNode>(){ 
 			@Override
 			public void onOpen(OpenEvent<TreeNode> event) {
@@ -134,19 +152,49 @@ public class FolderPanel {
 						selectedFolder = selectionModel.getSelectedObject();
 					}
 
-				}								
+				}
+				
 				String vollPath = selectedFolder.getPath();
+				
+				
+				
 				messageService.getMessage(vollPath, ImageManager.databasePath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
 			}
+		});
+		
+		tree.addCloseHandler(new CloseHandler<TreeNode>(){ 
+			@Override
+			public void onClose(CloseEvent<TreeNode> event) {				
+				Folder selectedFolder = null;
+				if(selectionModel.getSelectedObject() == null){
+					selectedFolder = (Folder) event.getTarget().getValue();
+					selectionModel.setSelected(selectedFolder, true);
+
+				}
+				else{
+					Folder currSelectedFolder = selectionModel.getSelectedObject();
+					Folder eventFolder = (Folder) event.getTarget().getValue();
+					if(!currSelectedFolder.equals(eventFolder)){
+						selectedFolder = eventFolder;
+						selectionModel.setSelected(selectedFolder, true);
+					}
+					else{
+						selectedFolder = selectionModel.getSelectedObject();
+					}
+
+				}
+				selectedFolder.getFolderlists().clear();
+				}
 		});
 
 		TreeNode rootNode = tree.getRootTreeNode(); 
 		rootNode.setChildOpen(0, true, false);
 
-		VerticalPanel panel_1 = new VerticalPanel();	    
-		panel_1.setWidth("330");
+		ScrollPanel panel_1 = new ScrollPanel();	    
+		//panel_1.setWidth("330");
 		panel_1.setHeight("700");
-		panel_1.addStyleName("gwt-CollectionPanel");
+		panel_1.addStyleName("scrollPanelText");		
+		//panel_1.addStyleName("cellSampleTable");
 		panel_1.add(tree);
 
 		SplitLayoutPanel p = new SplitLayoutPanel();
