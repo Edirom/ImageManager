@@ -15,10 +15,11 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.tutorialspoint.client.ImageManager;
+import com.tutorialspoint.client.controller.ContentDB;
 import com.tutorialspoint.client.controller.Message;
 import com.tutorialspoint.client.controller.MessageService;
 import com.tutorialspoint.client.controller.MessageServiceAsync;
-import com.tutorialspoint.client.view.LoginDialog.TempDialog;
+import com.tutorialspoint.client.model.Folder;
 
 public class CreateFolderDialog extends DialogBox {
 	
@@ -76,10 +77,14 @@ public class CreateFolderDialog extends DialogBox {
 
         final TextBox txtDatenBankPath = new TextBox();	         	         
         txtDatenBankPath.setWidth("300");
+        
+        Folder selectedFolder = FolderPanel.selectionModel.getSelectedObject();
+        String vollPath = selectedFolder.getPath();        
+        txtDatenBankPath.setValue(vollPath);
         txtDatenBankPath.addKeyUpHandler(new KeyUpHandler() {
             @Override
             public void onKeyUp(KeyUpEvent event) {
-           	 newPath = txtDatenBankPath.getValue();
+           	 	newPath = txtDatenBankPath.getValue();
               	  if(newPath.length() >0 && newName.length() >0){
               		okButton.setEnabled(true);
               	  }
@@ -139,7 +144,7 @@ public class CreateFolderDialog extends DialogBox {
         setWidget(panel);
 	}
 	
-	private class MessageCallBack implements AsyncCallback<Message> {
+	private class MessageCallBack implements AsyncCallback<ContentDB> {
 	      @Override
 	      public void onFailure(Throwable caught) {
 	         /* server side error occured */
@@ -147,7 +152,7 @@ public class CreateFolderDialog extends DialogBox {
 	         + caught.getMessage());	
 	      }
 	      @Override
-	      public void onSuccess(Message result) {
+	      public void onSuccess(ContentDB result) {
 	          /* server returned result, show user the message */
 	    	 // TempDialog myDialog = new TempDialog(result.getMessage());
 
@@ -182,7 +187,8 @@ public class CreateFolderDialog extends DialogBox {
 
 			//	folderPanel.createEditorView(result.getMessage());
 	   //       }
-	      }	   
+	      }
+			   
 	   }
 
 }

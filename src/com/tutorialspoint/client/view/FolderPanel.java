@@ -16,7 +16,6 @@ import com.google.gwt.user.cellview.client.TreeNode;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -191,10 +190,9 @@ public class FolderPanel {
 		rootNode.setChildOpen(0, true, false);
 
 		ScrollPanel panel_1 = new ScrollPanel();	    
-		//panel_1.setWidth("330");
+		panel_1.setWidth("330");
 		panel_1.setHeight("700");
 		panel_1.addStyleName("scrollPanelText");		
-		//panel_1.addStyleName("cellSampleTable");
 		panel_1.add(tree);
 
 		SplitLayoutPanel p = new SplitLayoutPanel();

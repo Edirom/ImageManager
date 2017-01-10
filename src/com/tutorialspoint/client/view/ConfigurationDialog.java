@@ -564,7 +564,7 @@ public void createEditorView(Map<String, String> result){
 		        	   
 	         	  // messageService.getMessage(databaseName, databasePath, new MessageCallBack());
 	            	//String newPathName = databaseName+"/"+newName;
-	            	messageService.getMessageForCreate(newName, newPath, databasePath, databaseUser, databasePW, new MessageCallBack());
+	            //	messageService.getMessageForCreate(newName, newPath, databasePath, databaseUser, databasePW, new MessageCallBack());
 	         	   
 	            }
 	         });

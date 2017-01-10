@@ -7,7 +7,7 @@ public interface MessageServiceAsync {
    void getMessage(String input, String databasePath, String databaseUser, String databasePW, AsyncCallback<ContentDB> callback);
 
 void getMessageForCreate(String databaseNewName, String databaseName, String databasePath, String databaseUser,
-		String databasePW, AsyncCallback<Message> messageCallBack);
+		String databasePW, AsyncCallback<ContentDB> callback);
 
 void getMessageUpload(String databaseFolder, String databasePath, String databaseUser, String databasePW,
 		AsyncCallback<Message> messageCallBack);
