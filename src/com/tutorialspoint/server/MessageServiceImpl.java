@@ -38,81 +38,81 @@ implements MessageService{
 
 	public ContentDB getMessage(String input, String databasePath, String databaseUser, String databasePW) {
 
-		//Collection col = null;
+		Collection col = null;
 
 		Map<List<String>, String> collectionMap = new HashMap<List<String>, String>();
 
-//		try {    
-//
-//			col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
-//
-//			col.setProperty(OutputKeys.INDENT, "no");
-//
-//			for(int i = 0; i<col.listChildCollections().length; i++){
-//				String colName = col.listChildCollections()[i];
-//
-//				List<String> collFolderData = new ArrayList<String>();
-//				collFolderData.add(colName);
-//				collFolderData.add("Folder");
-//				collectionMap.put(collFolderData, col.getName());
-//
-//				for(int j = 0; j<col.listResources().length; j++){
-//					String resId = col.listResources()[j];
-//					
-//					List<String> collFileData = new ArrayList<String>();
-//					collFileData.add(resId);
-//					collFileData.add("File");
-//					collectionMap.put(collFileData, col.getName());
-//
-//				}
-//
-//			}
-//
-//		} catch (XMLDBException e) {
-//			e.printStackTrace();
-//		} finally {
-//
-//			if(col != null) {
-//				try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
-//			}
-//		}
+		try {    
 
-		       String inputName[] = input.split("/");
-		       String parentName = inputName[inputName.length-1];
-			   
-		       if(parentName.equals("system")){
-		   		 List<String> testList_22 = new ArrayList<String>();
-		   	  	testList_22.add("system_1");
-		   	     testList_22.add("Folder");
-		   	 	  collectionMap.put(testList_22, parentName);
-		   	 	  
-		   	 	 List<String> testList_222 = new ArrayList<String>();
-		    	  	testList_222.add("system_12");
-		    	     testList_222.add("Folder");
-		    	 	  collectionMap.put(testList_222, parentName);
-		   		  
-		   	  }
-		       else{
-		       List<String> testList = new ArrayList<String>();
-		       testList.add("TemporaryItems");
-		       testList.add("File");
-		 	  collectionMap.put(testList, parentName);
-		 	  
-		 	 List<String> testList_1 = new ArrayList<String>();
-		 	testList_1.add("apps");
-		    testList_1.add("Folder");
-		 	  collectionMap.put(testList_1, parentName);
-		 	  
-		 	 List<String> testList_2 = new ArrayList<String>();
-		  	testList_2.add("contents");
-		     testList_2.add("Folder");
-		 	  collectionMap.put(testList_2, parentName);
-		 	  
-		 	 List<String> testList_3 = new ArrayList<String>();
-		   	testList_3.add("system");
-		      testList_3.add("Folder");
-		 	  collectionMap.put(testList_3, parentName);
-		       } 
+			col = DatabaseManager.getCollection(databasePath + input, databaseUser, databasePW);
+
+			col.setProperty(OutputKeys.INDENT, "no");
+
+			for(int i = 0; i<col.listChildCollections().length; i++){
+				String colName = col.listChildCollections()[i];
+
+				List<String> collFolderData = new ArrayList<String>();
+				collFolderData.add(colName);
+				collFolderData.add("Folder");
+				collectionMap.put(collFolderData, col.getName());
+
+				for(int j = 0; j<col.listResources().length; j++){
+					String resId = col.listResources()[j];
+					
+					List<String> collFileData = new ArrayList<String>();
+					collFileData.add(resId);
+					collFileData.add("File");
+					collectionMap.put(collFileData, col.getName());
+
+				}
+
+			}
+
+		} catch (XMLDBException e) {
+			e.printStackTrace();
+		} finally {
+
+			if(col != null) {
+				try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
+			}
+		}
+
+//		       String inputName[] = input.split("/");
+//		       String parentName = inputName[inputName.length-1];
+//			   
+//		       if(parentName.equals("system")){
+//		   		 List<String> testList_22 = new ArrayList<String>();
+//		   	  	testList_22.add("system_1");
+//		   	     testList_22.add("Folder");
+//		   	 	  collectionMap.put(testList_22, parentName);
+//		   	 	  
+//		   	 	 List<String> testList_222 = new ArrayList<String>();
+//		    	  	testList_222.add("system_12");
+//		    	     testList_222.add("Folder");
+//		    	 	  collectionMap.put(testList_222, parentName);
+//		   		  
+//		   	  }
+//		       else{
+//		       List<String> testList = new ArrayList<String>();
+//		       testList.add("TemporaryItems");
+//		       testList.add("File");
+//		 	  collectionMap.put(testList, parentName);
+//		 	  
+//		 	 List<String> testList_1 = new ArrayList<String>();
+//		 	testList_1.add("apps");
+//		    testList_1.add("Folder");
+//		 	  collectionMap.put(testList_1, parentName);
+//		 	  
+//		 	 List<String> testList_2 = new ArrayList<String>();
+//		  	testList_2.add("contents");
+//		     testList_2.add("Folder");
+//		 	  collectionMap.put(testList_2, parentName);
+//		 	  
+//		 	 List<String> testList_3 = new ArrayList<String>();
+//		   	testList_3.add("system");
+//		      testList_3.add("Folder");
+//		 	  collectionMap.put(testList_3, parentName);
+//		       } 
 
 		ContentDB message = new ContentDB();		
 		message.setMessage(collectionMap);
@@ -187,40 +187,51 @@ implements MessageService{
 			if(newcol == null){
 				CollectionManagementService mgt = (CollectionManagementService) col.getService("CollectionManagementService", "1.0");
 				newcol = mgt.createCollection(databaseNewName);
-			}
-
-			String pathSegments[] = newPath.split("/");
-			int numberLevel = pathSegments.length;
-			int toGet = 0;
-
-			Collection startCollection = DatabaseManager.getCollection(databasePath + pathSegments[0], databaseUser, databasePW);
-
-			for(int i = 0; i<startCollection.listChildCollections().length; i++){
-				String colName = startCollection.listChildCollections()[i];
 				
 				List<String> collFolderData = new ArrayList<String>();
-				collFolderData.add(colName);
+				collFolderData.add(newcol.getName());
 				collFolderData.add("Folder");
 				collectionMap.put(collFolderData, col.getName());
-
-				//collectionMap.put(colName, pathSegments[0]);
-				for(int j = 0; j<col.listResources().length; j++){
-					String resId = col.listResources()[j];
-					List<String> collFileData = new ArrayList<String>();
-					collFileData.add(resId);
-					collFileData.add("File");
-					collectionMap.put(collFileData, col.getName());
-					//collectionMap.put(resId, pathSegments[0]);
-				}
-				toGet ++;
-				if(toGet <= numberLevel){
-					Collection currCollection = startCollection.getChildCollection(colName);
-					if(currCollection.getChildCollectionCount()>0){
-						getTailCollection(currCollection, collectionMap, toGet, numberLevel);
-					} 
-				}
-
+				
 			}
+			
+			
+//*******************************************************************************************
+//			String pathSegments[] = newPath.split("/");
+//			int numberLevel = pathSegments.length;
+//			int toGet = 0;
+//
+//			Collection startCollection = DatabaseManager.getCollection(databasePath + pathSegments[0], databaseUser, databasePW);
+//
+//			for(int i = 0; i<startCollection.listChildCollections().length; i++){
+//				String colName = startCollection.listChildCollections()[i];
+//				
+//				List<String> collFolderData = new ArrayList<String>();
+//				collFolderData.add(colName);
+//				collFolderData.add("Folder");
+//				collectionMap.put(collFolderData, col.getName());
+//
+//				//collectionMap.put(colName, pathSegments[0]);
+//				for(int j = 0; j<col.listResources().length; j++){
+//					String resId = col.listResources()[j];
+//					List<String> collFileData = new ArrayList<String>();
+//					collFileData.add(resId);
+//					collFileData.add("File");
+//					collectionMap.put(collFileData, col.getName());
+//					//collectionMap.put(resId, pathSegments[0]);
+//				}
+//				toGet ++;
+//				if(toGet <= numberLevel){
+//					Collection currCollection = startCollection.getChildCollection(colName);
+//					if(currCollection.getChildCollectionCount()>0){
+//						getTailCollection(currCollection, collectionMap, toGet, numberLevel);
+//					} 
+//				}
+//
+//			}
+//***************************************************
+			
+			
 		}
 
 		catch (XMLDBException e) {
@@ -231,21 +242,16 @@ implements MessageService{
 				try { col.close(); } catch(XMLDBException xe) {xe.printStackTrace();}
 			}
 		}
-
-		//    collectionMap.put(databaseUser, databasePW);
-		//	  collectionMap.put("TemporaryItems", input);
-		//	  collectionMap.put("apps", input);
-		//	  collectionMap.put("contents", input);
-		//	  collectionMap.put("system", input);
-
-		//collectionMap.put("config", "system");
-		//collectionMap.put("repo", "system");
-		// collectionMap.put(databasePath, input);
-
-
-		// String messageString = "Hello " + outputTest + "!";     
+		
+//		String inputName[] = input.split("/");
+//	       String parentName = inputName[inputName.length-1];
+//		
+//		List<String> testList = new ArrayList<String>();
+//	       testList.add(databaseNewName);
+//	       testList.add("Folder");
+//	 	  collectionMap.put(testList, parentName);
+  
 		ContentDB message = new ContentDB();
-		// message.setMessage(messageString);
 		message.setMessage(collectionMap);
 
 		return message;

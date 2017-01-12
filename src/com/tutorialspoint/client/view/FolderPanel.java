@@ -42,6 +42,7 @@ public class FolderPanel {
 
 		createFolderButton = new Button("Create Folder");
 		createFolderButton.setWidth("100px");
+		createFolderButton.setEnabled(false);
 		createFolderButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
