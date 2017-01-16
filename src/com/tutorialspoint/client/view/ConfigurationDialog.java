@@ -467,8 +467,8 @@ public void createEditorView(Map<String, String> result){
                        // text/html, we can get the result text here (see the FormPanel
                          // documentation for further explanation).
                         // Window.alert(event.getResults());
-                    	 messageService.getMessageUpload(tb.getValue(), databasePath, databaseUser, databasePW, new MessageCallBack());
-                    	 hide();
+                    	// messageService.getMessageUpload(tb.getValue(), databasePath, databaseUser, databasePW, new MessageCallBack());
+                    	// hide();
                      }
                });                   
                  

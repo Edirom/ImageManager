@@ -36,7 +36,7 @@ public class CreateFolderDialog extends DialogBox {
 	public CreateFolderDialog() {
 
 		// Set the dialog box's caption.
-		setText("Create Folder");
+		setText("Create Directory");
 
 		// Enable animation.
 		setAnimationEnabled(true);
@@ -71,7 +71,7 @@ public class CreateFolderDialog extends DialogBox {
 		newPath = selectedFolder.getPath();        
 		txtDatenBankPath.setValue(newPath);
 		txtDatenBankPath.setEnabled(false);
-		Label lblDatenBankPath = new Label("Path");
+		Label lblDatenBankPath = new Label("Databasepath");
 
 
 		final TextBox txtDatenBankNewName = new TextBox();	         	         
@@ -88,7 +88,7 @@ public class CreateFolderDialog extends DialogBox {
 				}
 			}
 		});
-		Label lblDatenBankNewName = new Label("Name");
+		Label lblDatenBankNewName = new Label("Directory Name");
 
 
 		HorizontalPanel hPanel = new HorizontalPanel();

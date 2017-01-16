@@ -10,6 +10,10 @@ font-family: arial;
 }
 .gwt-FileUpload {
    color: green; 
+   margin-top: 20px;
+  /*margin-right: 40px;
+  margin-left: 50px;
+  margin-bottom: 10px;*/
 }
 
 .scrollPanelText {

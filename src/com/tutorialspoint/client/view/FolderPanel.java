@@ -34,14 +34,20 @@ public class FolderPanel {
 	final static SingleSelectionModel<Folder> selectionModel = new SingleSelectionModel<Folder>();
 
 	private MessageServiceAsync messageService = GWT.create(MessageService.class);
-	Button createFolderButton;
+	private Button createFolderButton;
+	private Button deleteButton;
+	private Button uploadDataButton;
+	private Button tileImagesButton;
+	
+	private Folder selectedFolder;
+	private Folder parentFromSelectedFolder;
 
 	public void createEditorView(Map<List<String>, String> map){
 
 		RootPanel.get("gwtContainer").clear();
 
-		createFolderButton = new Button("Create Folder");
-		createFolderButton.setWidth("100px");
+		createFolderButton = new Button("Create Directory");
+		createFolderButton.setWidth("130px");
 		createFolderButton.setEnabled(false);
 		createFolderButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -63,8 +69,9 @@ public class FolderPanel {
 			}
 		});
 
-		Button uploadDataButton = new Button("Upload Data");
-		uploadDataButton.setWidth("100px");
+		uploadDataButton = new Button("Upload Image(s)");
+		uploadDataButton.setWidth("130px");
+		uploadDataButton.setEnabled(false);
 		//uploadDataButton.addStyleName("gwt-Green-Button");
 		uploadDataButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -84,18 +91,21 @@ public class FolderPanel {
 			}
 		});
 
-		Button deleteButton = new Button("Delete");
-		deleteButton.setWidth("100px");	     
+		deleteButton = new Button("Delete Directory");
+		deleteButton.setWidth("130px");	
+		deleteButton.setEnabled(false);
 		//deleteButton.addStyleName("gwt-Delete-Button");
-		//	      deleteButton.addClickHandler(new ClickHandler() {
-		//		         @Override
-		//		         public void onClick(ClickEvent event) {
-		//		            Window.alert("Blue Button clicked!");
-		//		         }
-		//		      });
+		deleteButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				String selectedPath = selectionModel.getSelectedObject().getPath();
+				messageService.getMessageForDelete(selectedPath, ImageManager.databasePath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
+			}
+		});
 
-		Button tileImagesButton = new Button("Tile Image(s)");
-		tileImagesButton.setWidth("100px");	     
+		tileImagesButton = new Button("Tile Image(s)");
+		tileImagesButton.setWidth("130px");	
+		tileImagesButton.setEnabled(false);
 		//tileImagesButton.addStyleName("gwt-Blue-Button");
 		tileImagesButton.addClickHandler(new ClickHandler() {
 			@Override
@@ -125,9 +135,15 @@ public class FolderPanel {
 	        public void onSelectionChange(SelectionChangeEvent event) {
                if(selectionModel.getSelectedObject() != null && selectionModel.getSelectedObject().getTypeFolder().equals("Folder")){            	   
             	   createFolderButton.setEnabled(true);
+            	   deleteButton.setEnabled(true);
+            	   uploadDataButton.setEnabled(true);
+            	   tileImagesButton.setEnabled(true);
                }
                else{
             	   createFolderButton.setEnabled(false);
+            	   deleteButton.setEnabled(false);
+            	   uploadDataButton.setEnabled(false);
+            	   tileImagesButton.setEnabled(false);
                }
 	        }
 	    });
@@ -135,10 +151,11 @@ public class FolderPanel {
 		tree.addOpenHandler(new OpenHandler<TreeNode>(){ 
 			@Override
 			public void onOpen(OpenEvent<TreeNode> event) {
-				Folder selectedFolder = null;
+				selectedFolder = null;
 				if(selectionModel.getSelectedObject() == null){
 					selectedFolder = (Folder) event.getTarget().getValue();
 					selectionModel.setSelected(selectedFolder, true);
+					parentFromSelectedFolder = selectedFolder.getParent();
 
 				}
 				else{
@@ -147,17 +164,17 @@ public class FolderPanel {
 					if(!currSelectedFolder.equals(eventFolder)){
 						selectedFolder = eventFolder;
 						selectionModel.setSelected(selectedFolder, true);
+						parentFromSelectedFolder = selectedFolder.getParent();
 					}
 					else{
 						selectedFolder = selectionModel.getSelectedObject();
+						parentFromSelectedFolder = selectedFolder.getParent();
 					}
 
 				}
 				
 				String vollPath = selectedFolder.getPath();
-				
-				
-				
+								
 				messageService.getMessage(vollPath, ImageManager.databasePath, ImageManager.databaseUser, ImageManager.databasePW, new MessageCallBack());
 			}
 		});
@@ -225,10 +242,18 @@ public class FolderPanel {
 			//			myDialog.setPopupPosition(left, top);
 			//			myDialog.show();
 
-			Folder selectedFolder =   selectionModel.getSelectedObject();
+			
 
 			Map<List<String>, String> resultMap = result.getMessage();
-
+			
+			if(resultMap.isEmpty()){
+				parentFromSelectedFolder.getFolderlists().remove(selectedFolder);
+				selectionModel.setSelected(parentFromSelectedFolder, true);
+				selectedFolder.refresh();
+				
+			}
+			else{
+			//Folder selectedFolder =   selectionModel.getSelectedObject();
 			String listOutput = "";
 			for(List<String> nameKey : resultMap.keySet()){
 				listOutput =listOutput + " ,"+ nameKey.get(0);
@@ -240,6 +265,7 @@ public class FolderPanel {
 			}
 
 			selectedFolder.refresh();
+			}
 
 		}	   
 	}
