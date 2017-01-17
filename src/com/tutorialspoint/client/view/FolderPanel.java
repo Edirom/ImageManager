@@ -3,6 +3,9 @@ package com.tutorialspoint.client.view;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.widgets.Shell;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -76,18 +79,13 @@ public class FolderPanel {
 		uploadDataButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				//Composer node =   selectionModel.getSelectedObject();
-
 				UploadDataDialog uploadDataDialog = new UploadDataDialog();
 				uploadDataDialog.createFields();
-
-				//ConfigurationDialog myDialog = new ConfigurationDialog("uploadData");
 
 				int left = Window.getClientWidth()/ 3;
 				int top = Window.getClientHeight()/ 3;
 				uploadDataDialog.setPopupPosition(left, top);
 				uploadDataDialog.show();
-				//Window.alert("Green Button clicked!");
 			}
 		});
 
@@ -110,8 +108,13 @@ public class FolderPanel {
 		tileImagesButton.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				CutImageDialog cutImageDialog = new CutImageDialog();
+				cutImageDialog.createFields();
 
-				//Window.alert("Blue Button clicked!");
+				int left = Window.getClientWidth()/ 3;
+				int top = Window.getClientHeight()/ 3;
+				cutImageDialog.setPopupPosition(left, top);
+				cutImageDialog.show();
 			}
 		});
 

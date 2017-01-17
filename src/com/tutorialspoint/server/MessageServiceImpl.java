@@ -294,14 +294,79 @@ implements MessageService{
 
 		return message;
 	}
-
-
+	
 	public ContentDB getMessageUpload(String databaseFolder, String databasePath, String databaseUser, String databasePW) {
 
 		Map<List<String>, String> collectionMap = new HashMap<List<String>, String>();
 
 		File folder = new File("/Users/Shared/");
 		File[] listOfFiles = folder.listFiles();
+		
+		Collection col = null;
+		try {
+			col = DatabaseManager.getCollection(databasePath + databaseFolder, databaseUser, databasePW);
+			col.setProperty(OutputKeys.INDENT, "no");
+		} catch (XMLDBException e1) {
+			e1.printStackTrace();
+		}	
+
+		for (int i = 0; i < listOfFiles.length; i++) {
+			if (listOfFiles[i].isFile()) {
+				if(listOfFiles[i].getName().contains(".png") || listOfFiles[i].getName().contains(".jpg") || listOfFiles[i].getName().contains(".tif")
+						|| listOfFiles[i].getName().contains(".PNG") || listOfFiles[i].getName().contains(".JPG") || listOfFiles[i].getName().contains(".TIF")){
+					try {
+
+						String databaseNewName = listOfFiles[i].getName();
+						FileInputStream file = new FileInputStream("/Users/Shared/"+databaseNewName);
+
+						byte[] contents = new byte[file.available()];
+
+						file.read(contents);
+						file.close();
+
+						Resource res;
+						try {
+							res = col.createResource(databaseNewName, BinaryResource.RESOURCE_TYPE);
+							res.setContent(contents);
+							col.storeResource(res);
+
+							List<String> collFileData = new ArrayList<String>();
+							collFileData.add(databaseNewName);
+							collFileData.add("File");
+							collectionMap.put(collFileData, col.getName());
+
+						} catch (XMLDBException e) {
+							e.printStackTrace();
+						}
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}
+
+		ContentDB message = new ContentDB();
+		message.setMessage(collectionMap);
+
+		return message;
+
+	} 
+
+
+	public ContentDB getMessageImageTiles(String databaseFolder, String databasePath, String databaseUser, String databasePW) {
+
+		Map<List<String>, String> collectionMap = new HashMap<List<String>, String>();
+
+		File folder = new File("/Users/Shared/");
+		File[] listOfFiles = folder.listFiles();
+		
+		
+		ImageTiles tiles = new ImageTiles();
+		//tiles.run(cutImageDialog);
+		
 
 		Collection col = null;
 		try {

@@ -12,5 +12,7 @@ public interface MessageService extends RemoteService {
 	ContentDB getMessageForDelete(String selectedPath, String databasePath, String databaseUser, String databasePW);
    
 	ContentDB getMessageUpload(String databaseFolder, String databasePath, String databaseUser, String databasePW);
+	
+	ContentDB getMessageImageTiles(String databaseFolder, String databasePath, String databaseUser, String databasePW);
 
 }

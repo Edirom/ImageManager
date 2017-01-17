@@ -14,4 +14,7 @@ void getMessageUpload(String databaseFolder, String databasePath, String databas
 void getMessageForDelete(String selectedPath, String databasePath, String databaseUser, String databasePW,
 		AsyncCallback<ContentDB> callback);
 
+void getMessageImageTiles(String value, String databasePath, String databaseUser, String databasePW,
+		AsyncCallback<ContentDB> callback);
+
 }
